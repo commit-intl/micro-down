@@ -9,13 +9,19 @@ const r = [
     return `<h${h.length}>${text}</h${h.length}>`
   },
 
-  //image
+  // image
   /\!\[(.*)\]\(([^\s]*)(\s(.*))?\)/g,
   '<img src="$2" alt="$1" title="$4"/>',
 
   // links
   /\[(.*)\]\(([^\s]*)(\s(.*))?\)/g,
   '<a href="$2" title="$4">$1</a>',
+
+  // unordered lists
+  /^[\+\-]\s*(.*)$/gm,
+  "<li>$1</li>",
+  /((<li>.*<\/li>\n?)+)/g,
+  "<ul>$1</ul>",
 
   //pre format block
   /(^|\n)```((.|\n)*)\n```/g,
@@ -37,7 +43,7 @@ const r = [
   "<i>$2</i>",
 
   // replace remaining newlines with a <br>
-  /\n/g,
+  /(\s\s|\n)\n+/g,
   "<br>",
 
   // inject classes
