@@ -41,7 +41,9 @@
 
 <script>
   const updateResult = function () {
-    document.getElementById('result').innerHTML = parse(document.getElementById('input').value);
+    var result = parse(document.getElementById('input').value);
+    console.log(result);
+    document.getElementById('result').innerHTML = result;
   };
 </script>
 
@@ -69,7 +71,10 @@
 + list
 
 - a
-- b
+  - a1
+  - a2
++ b
+- c
 
 </textarea>
 
