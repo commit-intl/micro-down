@@ -1,11 +1,17 @@
 # micro-down
 
 
-- [ ] Headlines: ### Headline
-- [ ] Inline Highlight: *italic*, **bold**, ***bold italic***, `code.exec();` ~~strike through~~
-- [ ] Block Quotes: ```code block```, """citation block"""
-- [ ] Links: [Label](destination Title)
-- [ ] Images ![label](source altText))
+- [x] Headlines: ### Headline
+- [ ] Inline Highlight:
+    - [x] *italic*, **bold**, ***bold italic***, 
+    - [ ] ~~strike through~~
+- [x] Block Quotes: ```code block```
+- [x] Links: [Label](destination Title)
+- [x] Images ![label](source altText))
+- [x] Unformatet text: `nothing in here *will* be formated`
+- [x] add a css classes to any html element: ."this are classes"
 - [ ] Lists: using '+ ', '- ' and '1. '
+    - [x] Unorderd lists using: '+' and '-'
+    - [ ] Ordered lists using: '1.'
     - [ ] Nested Lists 
 - [ ] Tables: | headline | text |
