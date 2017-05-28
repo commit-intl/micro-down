@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>micro-down test</title>
+  <style>
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+      line-height: 1;
+    }
+
+    #input {
+      float: left;
+      height: 100vh;
+      width: 50%;
+    }
+
+    .red {
+      color: red;
+    }
+
+    .gray {
+      background: #cccccc;
+    }
+
+    .logo {
+      max-width: 200px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  const updateResult = function () {
+    document.getElementById('result').innerHTML = parse(document.getElementById('input').value);
+  };
+</script>
+
+<script src="../src/index.js"></script>
+
+<textarea id="input" onkeyup="updateResult()">
+#."red gray" h1
+## h2
+### h3
+#### h4
+##### h5
+###### h6
+
+`*italic* _italic_:` *italic* _italic_
+`**bold** __bold__:` **bold** __bold__
+`***bold italic*** ___bold italic___:` ***bold italic*** ___bold italic___
+
+[github](http://github.com Just a hover text!)
+![Nope no image here](http://github.com Just a hover text!)
+![github](https://assets-cdn.github.com/images/modules/logos_page/GitHub-Logo.png Git hub logo)."logo"
+
+</textarea>
+
+<div id="result">
+
+</div>
+
+<script>updateResult();</script>
+</body>
+</html>

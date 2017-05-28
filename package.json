@@ -1,0 +1,27 @@
+{
+  "name": "micro-down",
+  "version": "1.0.0",
+  "description": "tiny markdown parser",
+  "main": "index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShynRou/micro-down.git"
+  },
+  "keywords": [
+    "markdown",
+    "parser",
+    "mini",
+    "micro",
+    "minified",
+    "javascript",
+    "js"
+  ],
+  "author": "Dustin Hagemeier",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ShynRou/micro-down/issues"
+  },
+  "homepage": "https://github.com/ShynRou/micro-down#readme"
+}
