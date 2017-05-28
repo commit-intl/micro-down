@@ -10,8 +10,8 @@
 - [x] Images ![label](source altText))
 - [x] Unformatet text: `nothing in here *will* be formated`
 - [x] add a css classes to any html element: ."this are classes"
-- [ ] Lists: using '+ ', '- ' and '1. '
+- [x] Lists: using '+ ', '- ' and '1. '
     - [x] Unorderd lists using: '+' and '-'
-    - [ ] Ordered lists using: '1.'
-    - [ ] Nested Lists 
+    - [x] Ordered lists using: '1.'
+    - [x] Nested Lists 
 - [ ] Tables: | headline | text |
