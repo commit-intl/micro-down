@@ -3,19 +3,13 @@ var t = [];
 var j = 0;
 
 const r = [
+
+  // BLOCK STUFF ===============================
   // headlines
   /^(#+)\s*(.*)$/gm,
   function (match, h, text) {
     return `<h${h.length}>${text}</h${h.length}>`
   },
-
-  // image
-  /\!\[(.*)\]\(([^\s]*)(\s(.*))?\)/g,
-  '<img src="$2" alt="$1" title="$4"/>',
-
-  // links
-  /\[(.*)\]\(([^\s]*)(\s(.*))?\)/g,
-  '<a href="$2" title="$4">$1</a>',
 
   // unordered lists
   /^[\+\-]\s*(.*)$/gm,
@@ -33,6 +27,15 @@ const r = [
     t[++j] = text;
     return '`'+j+'`';
   },
+
+  // INLINE STUFF ===============================
+  // image
+  /\!\[(.*)\]\(([^\s]*)(\s(.*))?\)/g,
+  '<img src="$2" alt="$1" title="$4"/>',
+
+  // links
+  /\[(.*)\]\(([^\s]*)(\s(.*))?\)/g,
+  '<a href="$2" title="$4">$1</a>',
 
   // bold
   /(\*|_)\1([^\*|_]+)\1\1/g,
