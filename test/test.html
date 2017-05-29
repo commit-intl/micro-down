@@ -35,6 +35,28 @@
       max-width: 200px;
       height: auto;
     }
+
+    th, td {
+      padding: 2px 15px 2px 2px;
+      border-bottom: 1px solid #666;
+      background: #dddddd;
+    }
+
+    th:nth-child(odd) {
+      background: #eeeeee;
+    }
+
+    td:nth-child(odd) {
+      background: rgba(0,0,0,.1);
+    }
+
+    blockquote {
+      padding: 4px;
+      background: #ffffdd;
+      box-shadow: 2px 2px 4px #999999;
+      border: 1px solid #cccccc;
+    }
+
   </style>
 </head>
 <body>
@@ -75,6 +97,28 @@
   - a2
 + b
 - c
+
+```
+## Markdown
+
+  *looks*
+  **like**
+  ***this***
+```
+
+> #blockquote
+> This is a block quote
+> and it can **continue** after
+> a new line,
+>
+> + even lists
+>   1. and
+>
+> | tables | work | here!
+
+
+| this    | is      | a
+| really  | useless | table
 
 </textarea>
 

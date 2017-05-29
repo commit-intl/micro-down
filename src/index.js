@@ -1,29 +1,46 @@
-var t = [],
-  j = 0,
+var t,
+  j,
   i,
   /**
    * outdent all rows by first as reference
    */
   o = (text) => {
-    return text.replace(RegExp('^' + (text.match(/^\s+/) || '')[0], 'gm'), '');
+    return text.replace(RegExp('^' + (text.match(/^[^\s]+\s+/) || '')[0], 'gm'), '');
   },
   /**
    * recursive list parser
    */
-  l = (text,temp) => {
+  l = (text, temp) => {
     temp = text.match(/\n?[+-]/m) ? 'ul' : 'ol';
     return text ?
       `<${temp}>${o(text).replace(/(?:[+-]|\d+\.)(.*)\n?((  .*\n?)*)/g, (match, a, b) => `<li>${a + l(b)}</li>`)}</${temp}>`
       : '';
   },
+
+  m = (tag, regex, replacement) => (match, a) => `<${tag}>\n${match.replace(regex, replacement)}\n</${tag}>`,
   // REPLACEMENT RULES
   r = [
 
     // BLOCK STUFF ===============================
 
-    //pre format block
-    /(^|\n)```((.|\n)*)\n```/g,
+    // pre format block
+    /^```((.|\n)*)\n```/gm,
     "<pre>`$1`</pre>",
+
+    // extrude pre format inline
+    /`([^`]*)`/g,
+    (match, text) => {
+      t[++j] = text;
+      return '`' + j + '`';
+    },
+
+    // blockquotes
+    /(^>.*\n?)+/gm,
+    m('blockquote', /^> ?(.*)$/gm, '$1' ),
+
+    // tables
+    /((^|\n)\|.*)+/g,
+    m('table',/^.*$/gm,m('tr',/\|([^|]*)/g,'<td>$1</td>')),
 
     // headlines
     /^(#+) *(.*)$/gm,
@@ -33,16 +50,9 @@ var t = [],
     /(?:(^|\n)([+-]|\d+\.)(.*(\n  +.*)*))+/g,
     l,
 
-    // extrude pre format inline
-    /`([^`]*)`/g,
-    (match, text) => {
-      t[++j] = text;
-      return '`' + j + '`';
-    },
-
     // INLINE STUFF ===============================
     // image
-    /(\!)?\[(.*)\]\(([^\s]*)( (.*))?\)/g,
+    /\!\[(.*)\]\(([^\s]*)( (.*))?\)/g,
     '<img src="$2" alt="$1" title="$4"/>',
 
     // links
@@ -70,9 +80,9 @@ var t = [],
     (match, number) => t[number],
   ],
   parse = (text) => {
-    i = 0;
+    i = j = 0;
     t = [];
-    j = 0;
+
     while (i < r.length) {
       text = text.replace(r[i++], r[i++]);
     }
