@@ -21,6 +21,10 @@ var t,
   // REPLACEMENT RULES
   r = [
 
+    // PREVENT ERRORS ============================
+    '\r\v\b\f',
+    '',
+
     // BLOCK STUFF ===============================
 
     // pre format block
