@@ -5,7 +5,7 @@ var t,
    * outdent all rows by first as reference
    */
   o = (text) => {
-    return text.replace(RegExp('^' + (text.match(/^[^\s]+\s+/) || '')[0], 'gm'), '');
+    return text.replace(RegExp('^' + (text.match(/^[^\s]?\s+/) || '')[0], 'gm'), '');
   },
   /**
    * recursive list parser
@@ -13,10 +13,13 @@ var t,
   l = (text, temp) => {
     temp = text.match(/\n?[+-]/m) ? 'ul' : 'ol';
     return text ?
-      `<${temp}>${o(text).replace(/(?:[+-]|\d+\.)(.*)\n?((  .*\n?)*)/g, (match, a, b) => `<li>${a + l(b)}</li>`)}</${temp}>`
+      `<${temp}>${text.replace(/(?:[+-]|\d+\.) ?(.*)\n?((  .*\n?)*)/g, (match, a, b) => `<li>${a}\n${o(b || '').replace(/(?:(^|\n)([+-]|\d+\.) *(.*(\n  +.*)*))+/g, l)}</li>`)}</${temp}>`
       : '';
   },
 
+  /**
+   * function chain of replacements
+   */
   m = (tag, regex, replacement) => (match, a) => `<${tag}>\n${match.replace(regex, replacement)}\n</${tag}>`,
   // REPLACEMENT RULES
   r = [
@@ -35,6 +38,7 @@ var t,
     /`([^`]*)`/g,
     (match, text) => {
       t[++j] = text;
+      console.log(t);
       return '`' + j + '`';
     },
 
@@ -46,13 +50,13 @@ var t,
     /((^|\n)\|.*)+/g,
     m('table',/^.*$/gm,m('tr',/\|([^|]*)/g,'<td>$1</td>')),
 
+    // lists
+    /(?:(^|\n)([+-]|\d+\.) *(.*(\n  +.*)*))+/g,
+    l,
+
     // headlines
     /^(#+) *(.*)$/gm,
     (match, h, text) => `<h${h.length}>${text}</h${h.length}>`,
-
-    // unordered lists
-    /(?:(^|\n)([+-]|\d+\.)(.*(\n  +.*)*))+/g,
-    l,
 
     // INLINE STUFF ===============================
     // image
@@ -76,7 +80,7 @@ var t,
     "<br>",
 
     // inject classes
-    /(<[^>]+)>\."([^"]*)"/g,
+    /(<[^>]+)>\s*\."([^"]*)"/g,
     '$1 class="$2">',
 
     // inject pre format inline texts
