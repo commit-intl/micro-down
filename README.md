@@ -1,6 +1,9 @@
 # micro-down
 
+Markdown parser with a gziped size of only **655 bytes**.
 
+
+## support:
 - [x] Headlines: ### Headline
 - [ ] Inline Highlight:
     - [x] *italic*, **bold**, ***bold italic***, 
