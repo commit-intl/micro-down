@@ -11,8 +11,8 @@
     - [ ] ~~strike through~~
 - [x] Blocks
     - [x] pre format blocks
-    - [x] div blocks
-    - [x] class support
+    - [x] div blocks
+    - [x] class support
 - [x] Blockquotes: > something
 - [x] Links: [Label](destination Title)
 - [x] Images ![label](source altText))
