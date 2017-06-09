@@ -31,8 +31,15 @@ var t,
     // BLOCK STUFF ===============================
 
     // pre format block
-    /^```((.|\n)*)\n```/gm,
-    "<pre>`$1`</pre>",
+    /^(["`]{3})(.*)\n((.|\n)*)\n\1/gm,
+    (match, wrapper, c, content, tag) => {
+      tag = 'div';
+      if(wrapper == '```') {
+        tag = 'pre';
+        content = '`'+content+'`';
+      }
+      return `<${tag} class='${c}'>${content}</${tag}>`;
+    },
 
     // extrude pre format inline
     /`([^`]*)`/g,
@@ -44,11 +51,11 @@ var t,
 
     // blockquotes
     /(^>.*\n?)+/gm,
-    m('blockquote', /^> ?(.*)$/gm, '$1' ),
+    m('blockquote', /^> ?(.*)$/gm, '$1'),
 
     // tables
     /((^|\n)\|.*)+/g,
-    m('table',/^.*$/gm,m('tr',/\|([^|]*)/g,'<td>$1</td>')),
+    m('table', /^.*$/gm, m('tr', /\|([^|]*)/g, '<td>$1</td>')),
 
     // lists
     /(?:(^|\n)([+-]|\d+\.) *(.*(\n  +.*)*))+/g,
