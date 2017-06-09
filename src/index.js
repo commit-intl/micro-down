@@ -58,6 +58,10 @@ var t,
     /^(#+) *(.*)$/gm,
     (match, h, text) => `<h${h.length}>${text}</h${h.length}>`,
 
+    // headlines
+    /^===+(?=\s*$)/gm,
+    '<hr>',
+
     // INLINE STUFF ===============================
     // image
     /\!\[(.*)\]\(([^\s]*)( (.*))?\)/g,
