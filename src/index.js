@@ -31,7 +31,7 @@ var t,
     // BLOCK STUFF ===============================
 
     // pre format block
-    /^(["`]{3})(.*)\n((.|\n)*)\n\1/gm,
+    /^(["`]{3})(.*)(\n(.*\n)*?)\1/gm,
     (match, wrapper, c, content, tag) => {
       tag = 'div';
       if(wrapper == '```') {
