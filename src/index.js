@@ -38,7 +38,7 @@ var t,
         tag = 'pre';
         content = '`'+content+'`';
       }
-      return `<${tag} class='${c}'>${content}</${tag}>`;
+      return `<${tag} class="${c}">${content}</${tag}>`;
     },
 
     // extrude pre format inline
