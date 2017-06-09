@@ -1,7 +1,7 @@
 
 # micro-down
 
-Markdown parser with a gziped size of only **655 bytes**.
+**<1kB** markdown parser 
 
 
 ## support:
@@ -10,8 +10,9 @@ Markdown parser with a gziped size of only **655 bytes**.
     - [x] *italic*, **bold**, ***bold italic***, 
     - [ ] ~~strike through~~
 - [x] Blocks
-    - [x] ``pre format blocks```
-    - [x] """div blocks"""
+    - [x] pre format blocks
+    - [x] div blocks
+    - [x] class support
 - [x] Blockquotes: > something
 - [x] Links: [Label](destination Title)
 - [x] Images ![label](source altText))
