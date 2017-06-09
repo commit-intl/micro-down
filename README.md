@@ -12,8 +12,8 @@
 - [x] Blocks
     - [x] pre format blocks
     - [x] div blocks
+    - [x] blockquotes: > something
     - [x] class support
-- [x] Blockquotes: > something
 - [x] Links: [Label](destination Title)
 - [x] Images ![label](source altText))
 - [x] Unformatet text: `nothing in here *will* be formated`
