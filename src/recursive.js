@@ -1,4 +1,7 @@
-var t,
+/*
+ * tag helper
+ */
+var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => `${k}="${values[k]}"`) : '')}>${content}</${tag}>`,
   /**
    * outdent all rows by first as reference
    */
@@ -18,26 +21,18 @@ var t,
   /**
    * function chain of replacements
    */
-  m = (tag, regex, replacement) => (match, a) => `<${tag}>\n${match.replace(regex, replacement)}\n</${tag}>`,
+  m = (tag, regex, replacement) => (match, a) => t(tag, parse(match.replace(regex, replacement))),
   // REPLACEMENT RULES
   r = [
-
-    // PREVENT ERRORS ============================
-    /[\r\v\b\f]/g,
-    '',
-
     // BLOCK STUFF ===============================
 
     // pre format block
     /^(["`]{3})(.*)(\n(.*\n)*?)\1/gm,
-    (match, wrapper, c, content, tag) => {
-      tag = 'div';
-      if (wrapper == '```') {
-        tag = 'pre';
-        content = '`' + content + '`';
-      }
-      return `<${tag} class="${c}">${content}</${tag}>`;
-    },
+    (match, wrapper, c, content, tag) =>
+      wrapper == '"""' ?
+        t('div', parse(content), { class: c })
+        : t('pre', content, { class: c }),
+
 
     // extrude pre format inline
     /`([^`]*)`/g,
@@ -48,8 +43,12 @@ var t,
     m('blockquote', /^> ?(.*)$/gm, '$1'),
 
     // tables
-    /((^|\n)\|.*)+/g,
-    m('table', /^.*$/gm, m('tr', /\|([^|]*)/g, '<td>$1</td>')),
+    /((^|\n)\|.+)+/g,
+    m('table', /^.*$/gm,
+      m('tr', /\|(-?)([^|]+)\1(\|$)?/gm,
+        (match, type, content) => t(type ? 'th' : 'td', parse(content))
+      )
+    ),
 
     // lists
     /(?:(^|\n)([+-]|\d+\.) *(.*(\n  +.*)*))+/g,
@@ -57,7 +56,7 @@ var t,
 
     // headlines
     /^(#+) *(.*)$/gm,
-    (match, h, text) => `<h${h.length}>${text}</h${h.length}>`,
+    (match, h, text) => t('h' + h.length, parse(text)),
 
     // headlines
     /^===+(?=\s*$)/gm,
@@ -69,42 +68,41 @@ var t,
     '<img src="$2" alt="$1" title="$4"/>',
 
     // links
-    /\[(.*)\]\(([^\s]*)( (.*))?\)/g,
-    '<a href="$2" title="$4">$1</a>',
+    /\[(.*)\]\(([^\s]*)( .*)?\)/g,
+    (match, text, href, title) => t('a', parse(text), { href, title }),
 
-    // bold
-    /(\*|_)\1([^\*|_]+)\1\1/g,
-    "<b>$2</b>",
+    // bold, italic, bold & italic
+    /([\*_]{1,3})((.|\n)+?)\1/g,
+    (match, k, text) => {
+      k = k.length;
+      text = parse(text);
+      if (k > 1) text = `<b>${text}</b>`;
+      if (k % 2) text = `<i>${text}</i>`;
+      return text;
+    },
 
-    // italic
-    /(\*|_)([^\*|_]+)\1/g,
-    "<i>$2</i>",
 
     // replace remaining newlines with a <br>
     /(  |\n)\n+/g,
-    "<br>",
+    '<br>',
 
     // inject classes
-    /(<[^>]+)>\s*\."([^"]*)"/g,
-    '$1 class="$2">',
-
-    // inject pre format inline texts
-    /`(\d+)`/g,
-    (match, number) => t[number],
+    // /(<[^>]+)>\s*\."([^"]*)"/g,
+    // '$1 class="$2">',
   ],
   parse = (text) => {
+    text = text.replace(/[\r\v\b\f]/g, '');
     var i = 0, f;
-    t = [];
 
     while (i < r.length) {
-      if(f = r[i++].exec(text)) {
-        return parse(text.slice(0, f.index)) + x(r[i],f) + parse(text.slice(f.index + f[0].length));
+      if (f = r[i++].exec(text)) {
+        return parse(text.slice(0, f.index)) + x(r[i], f) + parse(text.slice(f.index + f[0].length));
       }
       i++;
     }
     return text;
   },
-  x = (t, f) => typeof t == 'string' ? t.replace(/\$(\d)/g, (m,d) => f[d]) : t(...f)
+  x = (t, f) => typeof t == 'string' ? t.replace(/\$(\d)/g, (m, d) => f[d]) : t(...f)
 ;
 
 module.exports = { rules: r, parse };
