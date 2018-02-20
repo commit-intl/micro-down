@@ -1,20 +1,23 @@
 var
   t = (tag, inner) => `<${tag}>${inner}</${tag}>`,
+  h = {
+    ' ': [
+      '[^\n]',
+      (args) => t('h' + Math.min(args[0].length - 2, 6), args[1])
+    ]
+  },
+  hr = {
+    '\=': [
+      '\=',
+      () => '<hr/>'
+    ]
+  },
+  block = {
+    '#': h,
+    '\=': hr,
+  },
   r = {
-    '\n': {
-      '#?#?#?#?#?# ': [
-        '\n',
-        (args) => t('h' + (args[1].length-1), args[2])
-      ],
-      '===': [
-        '\n',
-        () => '<hr/>'
-      ],
-      '\n': [
-        0,
-        () => '<br/>'
-      ]
-    }
+    '\n': block,
   },
   i, // INDEX
   j, // 2nd INDEX
@@ -31,51 +34,41 @@ var
     string = '\n' + string;
     i = 0;
     e = o = '';
-    f = [];
+    f = [''];
     s = r;
-    m = (k, u) => {
-      j = 0;
-      while (k && (d = k[j++])) {
-        i++;
-        if(!u) {
-          if (d == '?') {
-            d = k[j++];
-            d != string[i-1] && i--;
-          } else if (d != string[i-1]) {
-            return 1;
-          }
-        }
-        else {
-          while (string[i] && string[i-1] != d) {
-            i++;
-          }
-          i--;
-        }
-      }
-    };
 
     while (i < string.length) {
       e = i;
       for (k in s) {
-        i = e;
-        if (!m(k)) {
-          f.push(string.substr(e,i-e));
-          e = i;
-          if (s[k].length !== undefined) {
-            m(s[k][0], 1);
-            f.push(string.substr(e,i-e));
+        m = new RegExp(k);
+        console.log([k, f[0] + string[i]]);
+        if (m.test(string[i])) {
+          s = s[k] || r;
+          f[0] += string[i++];
+          console.log('new:', s);
+          if (s.length !== undefined) {
+            n = new RegExp(s[0]);
+            while (n.test(string[i++])) {
+            }
+            f[1] = string.substr(e, --i - e);
+            o += s[1](f);
+            console.log('exec:', f);
             e = i;
-            o += s[k][1](f);
-            f = [];
-            s = r;
-            break;
           }
-          else {
-            s = s[k];
-          }
+          break;
         }
       }
-      o += string.substr(e,i-e);
+      if (s === r) {
+          console.log('step:', string[i]);
+          o += string[i++];
+          f = [''];
+      }
+      if (e == i) {
+        s = r;
+        f = [''];
+      }
     }
     return o;
   };
+
+h['#'] = h;
