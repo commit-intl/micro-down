@@ -76,11 +76,14 @@ var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).
     (match, k, text) => {
       k = k.length;
       text = parse(text);
-      if (k > 1) text = `<b>${text}</b>`;
-      if (k % 2) text = `<i>${text}</i>`;
+      if (k > 1) text = t('b',text);
+      if (k % 2) text = t('i',text);
       return text;
     },
 
+    // strike through
+    /~~((.|\n)+?)~~/g,
+    (match, text) => t('s',parse(text)),
 
     // replace remaining newlines with a <br>
     /(  |\n)\n+/g,
