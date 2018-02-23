@@ -8,7 +8,7 @@ JavaScript based Markdown parser with no dependencies.
 - Headlines: `### Headline`
 - Inline Highlight:
     - `*italic*, **bold**, ***bold italic***`, 
-    - `\`_code_="- something";\``, 
+    - \``_code_="- something";`\`, 
     - `~underline~, ~~~deleted~~~, ~~strike through~~`
 - Blocks
     - pre format blocks: surroundent by  \`\`\`
