@@ -12,9 +12,9 @@ var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).
    * recursive list parser
    */
   l = (text, temp) => {
-    temp = text.match(/\n?[+-]/m) ? 'ul' : 'ol';
+    temp = text.match(/^[+-]/m) ? 'ul' : 'ol';
     return text ?
-      `<${temp}>${text.replace(/(?:[+-]|\d+\.) ?(.*)\n?((  .*\n?)*)/g, (match, a, b) => `<li>${a}\n${o(b || '').replace(/(?:(^|\n)([+-]|\d+\.) *(.*(\n  +.*)*))+/g, l)}</li>`)}</${temp}>`
+      `<${temp}>${text.replace(/(?:[+-]|\d+\.) +(.*)\n?((  .*\n?)*)/g, (match, a, b) => `<li>${parse(`${a}\n${o(b || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n  +.*)*))+/g, l)}`)}</li>`)}</${temp}>`
       : '';
   },
 
@@ -27,7 +27,7 @@ var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).
     // BLOCK STUFF ===============================
 
     // pre format block
-    /^(["`]{3})(.*)(\n(.*\n)*?)\1/gm,
+    /^("""|```)(.*)(\n(.*\n)*?)\1/gm,
     (match, wrapper, c, content, tag) =>
       wrapper == '"""' ?
         t('div', parse(content), { class: c })
@@ -36,7 +36,7 @@ var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).
 
     // extrude pre format inline
     /`([^`]*)`/g,
-    (match, text) => text,
+    (match, text) => t('code', text),
 
     // blockquotes
     /(^>.*\n?)+/gm,
@@ -51,7 +51,7 @@ var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).
     ),
 
     // lists
-    /(?:(^|\n)([+-]|\d+\.) *(.*(\n  +.*)*))+/g,
+    /(?:(^|\n)([+-]|\d+\.) +(.*(\n  +.*)*))+/g,
     l,
 
     // headlines
@@ -59,7 +59,7 @@ var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).
     (match, h, text) => t('h' + h.length, parse(text)),
 
     // headlines
-    /^===+(?=\s*$)/gm,
+    /^(===+|---+)(?=\s*$)/gm,
     '<hr>',
 
     // INLINE STUFF ===============================
@@ -76,22 +76,18 @@ var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).
     (match, k, text) => {
       k = k.length;
       text = parse(text);
-      if (k > 1) text = t('b',text);
-      if (k % 2) text = t('i',text);
+      if (k > 1) text = t('b', text);
+      if (k % 2) text = t('i', text);
       return text;
     },
 
     // strike through
-    /~~((.|\n)+?)~~/g,
-    (match, text) => t('s',parse(text)),
+    /(~{1,3})((.|\n)+?)\1/g,
+    (match, k, text) => t([, 'u', 's', 'del'][k.length], parse(text)),
 
     // replace remaining newlines with a <br>
     /(  |\n)\n+/g,
     '<br>',
-
-    // inject classes
-    // /(<[^>]+)>\s*\."([^"]*)"/g,
-    // '$1 class="$2">',
   ],
   parse = (text) => {
     text = text.replace(/[\r\v\b\f]/g, '');
@@ -108,4 +104,6 @@ var t = (tag, content, values) => `<${tag + (values ? ' ' + Object.keys(values).
   x = (t, f) => typeof t == 'string' ? t.replace(/\$(\d)/g, (m, d) => f[d]) : t(...f)
 ;
 
-module.exports = { rules: r, parse };
+if (typeof module != 'undefined') {
+  module.exports = { rules: r, parse };
+}
