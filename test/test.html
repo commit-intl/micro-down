@@ -63,7 +63,7 @@
 
 <script>
   const updateResult = function () {
-    var result = parse(document.getElementById('input').value);
+    var result = microdown.parse(document.getElementById('input').value);
     console.log(result);
     document.getElementById('result').innerHTML = result;
   };

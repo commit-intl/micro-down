@@ -9,17 +9,17 @@ JavaScript based Markdown parser with no dependencies.
 - Inline:
     - `*italic*, **bold**, ***bold italic***`
     - \``_code_="- something";`\`
-    - `~underline~,~~strike through~~, ~~~deleted~~~`
+    - `~underline~, ~~strike through~~, ~~~deleted~~~`
 - Blocks:
-    - pre format blocks: surroundent by  \`\`\`
+    - pre format blocks: surrounded by  \`\`\`
     - div blocks: `""" just a div block """`
     - blockquotes: `> something`
     - class support
 - Links: `[Label](destination Title)`
 - Images: `![label](source altText))`
 - Lists:
-    - Unorderd lists using: `+` and `-`
+    - Unordered lists using: `+` and `-`
     - Ordered lists using: `1.`
-    - Nested Lists
+    - Nested lists
 - Tables: `| some | text |`
-    - Headerrow: `|- header -|- row -|`
+    - Header row: `|- header -|- row -|`
