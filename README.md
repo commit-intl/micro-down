@@ -15,6 +15,7 @@ JavaScript based Markdown parser with no dependencies.
     - div blocks: `""" just a div block """`
     - blockquotes: `> something`
     - class support
+- IFrames: `&[class](url)` `&[width,height,frame class](url)` 
 - Links: `[Label](destination Title)`
 - Images: `![label](source altText))`
 - Lists:

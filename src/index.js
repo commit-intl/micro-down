@@ -64,7 +64,11 @@ const microdown = function () {
       /`([^`]*)`/g,
       (match, text) => t('code', text),
 
-      // image
+      // iframe
+      /\&\[(?:(.+),(.+),([^ ]+))?( ?.+)?\]\((.*?)?\)/g,
+      '<iframe src="$5" class="$4" width="$1" height="$2" frameborder="$3"></iframe>',
+
+      // link
       /\!\[(.*)\]\(([^\s]*)( (.*))?\)/g,
       '<img src="$2" alt="$1" title="$4"/>',
 
