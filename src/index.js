@@ -50,7 +50,7 @@ const microdown = function () {
       l,
 
       // headlines
-      /^(#+) *(.*)(?:$)/gm,
+      /^(#+) +(.*)(?:$)/gm,
       (match, h, text) => t('h' + h.length, inline(text)),
 
       // horizontal rule
@@ -63,6 +63,10 @@ const microdown = function () {
       // extrude pre format inline
       /`([^`]*)`/g,
       (match, text) => t('code', text),
+
+      //anchor
+      /#\[([^\]]+)\]/g,
+      '<a name="$1"/>',
 
       // iframe
       /\&\[(?:(.+),(.+),([^ ]+))?( ?.+)?\]\((.*?)?\)/g,

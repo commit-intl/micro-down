@@ -2,7 +2,14 @@
 
 JavaScript based Markdown parser with no dependencies.
 
-**1.03kB** markdown parser *(gzipped + minified)*
+**1.05kB** markdown parser *(gzipped + minified)*
+
+[check out this demo](https://shynrou.github.io/micro-down)
+
+
+```
+npm install -S micro-down
+```
 
 ## support:
 - Headlines: `### Headline`

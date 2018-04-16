@@ -2,11 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>micro-down test</title>
+  <title>micro-down</title>
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,400i,700" rel="stylesheet">
   <style>
+
+    html {
+      font-family: "Ubuntu", sans-serif;
+      scroll-behavior: smooth;
+    }
+
     h1, h2, h3, h4, h5, h6 {
-      margin: 0;
       line-height: 1;
+    }
+
+    h2, h3, h4, h5, h6 {
+      margin-top: 50px;
     }
 
     #input {
@@ -47,7 +57,7 @@
     }
 
     td:nth-child(odd) {
-      background: rgba(0,0,0,.1);
+      background: rgba(0, 0, 0, .1);
     }
 
     blockquote {
@@ -57,7 +67,86 @@
       border: 1px solid #cccccc;
     }
 
+    .center {
+      text-align: center;
+    }
+
+    .navigation {
+      background-color: #D6EDFF;
+      padding: .1rem 1rem;
+    }
+
+    .navigation a:hover {
+      background-color: #006FED;
+    }
+
+    .navigation a {
+      display: inline-block;
+      padding: .5rem 1rem;
+      background-color: #008DFE;
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+
   </style>
+  <script>
+    'use strict';
+    var microdown = function () {
+      var a = this, b = function (a, b, c) {
+        return '<' + (a + (c ? ' ' + Object.keys(c).map(function (a) {
+          return a + '="' + (c[a] || '') + '"'
+        }).join(' ') : '')) + '>' + b + '</' + a + '>'
+      }, c = function (a) {
+        return a.replace(new RegExp('^' + (a.match(/^[^\s]?\s+/) || '')[0], 'gm'), '')
+      }, d = function (a, b) {
+        return b = a.match(/^[+-]/m) ? 'ul' : 'ol', a ? '<' + b + '>' + a.replace(/(?:[+-]|\d+\.) +(.*)\n?((  .*\n?)*)/g, function (e, f, a) {
+          return '<li>' + g(f + '\n' + c(a || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n  +.*)*))+/g, d)) + '</li>'
+        }) + '</' + b + '>' : ''
+      }, e = function (a, c, d) {
+        return function (e) {
+          return b(a, g(e.replace(c, d)))
+        }
+      }, f = function (a) {
+        return h(a, [/^("""|```)(.*)(\n(.*\n)*?)\1/gm, function (a, d, e, f) {
+          return '"""' === d ? b('div', i(f), {class: e}) : b('pre', f, {class: e})
+        }, /(^>.*\n?)+/gm, e('blockquote', /^> ?(.*)$/gm, '$1'), /((^|\n)\|.+)+/g, e('table', /^.*$/gm, e('tr', /\|(-?)([^|]+)\1(\|$)?/gm, function (a, c, d) {
+          return b(c ? 'th' : 'td', g(d))
+        })), /(?:(^|\n)([+-]|\d+\.) +(.*(\n  +.*)*))+/g, d, /^(#+) +(.*)(?:$)/gm, function (a, c, d) {
+          return b('h' + c.length, g(d))
+        }, /^(===+|---+)(?=\s*$)/gm, '<hr>'], i)
+      }, g = function (a) {
+        return h(a, [/`([^`]*)`/g, function (a, c) {
+          return b('code', c)
+        }, /#\[([^\]]+)\]/g, '<a name="$1"/>', /\&\[(?:(.+),(.+),([^ ]+))?( ?.+)?\]\((.*?)?\)/g, function (a, d, e, f, g, h) {
+          return b('iframe', '', {width: d, height: e, frameborder: f, class: g, src: h})
+        }, /\!\[(.*)\]\(([^\s]*)(?: (.*))?\)/g, function (a, c, d, e) {
+          return b('img', '', {src: d, alt: c, title: e})
+        }, /\[(.*)\]\(([^\s]*)( .*)?\)/g, function (a, c, d, e) {
+          return b('a', g(c), {href: d, title: e})
+        }, /([\*_]{1,3})((.|\n)+?)\1/g, function (a, c, d) {
+          return c = c.length, d = g(d), 1 < c && (d = b('b', d)), c % 2 && (d = b('i', d)), d
+        }, /(~{1,3})((.|\n)+?)\1/g, function (a, c, d) {
+          return b([, 'u', 's', 'del'][c.length], g(d))
+        }, /  \n|\n  /g, '<br>'], g)
+      }, h = function (b, c, d) {
+        for (var e, f = 0; f < c.length;) {
+          if (e = c[f++].exec(b)) return d(b.slice(0, e.index)) + ('string' == typeof c[f] ? c[f].replace(/\$(\d)/g, function (a, b) {
+            return e[b]
+          }) : c[f].apply(a, e)) + d(b.slice(e.index + e[0].length));
+          f++
+        }
+        return b
+      }, i = function (a) {
+        a = a.replace(/[\r\v\b\f]/g, '');
+        var c = f(a);
+        return c !== a || c.match(/^[\s\n]*$/i) || (c = c.trim().replace(/((.|\n)+?)(\n\n+|$)/g, function (a, c) {
+          return b('p', g(c))
+        })), c
+      };
+      return {parse: i, inline: g}
+    }();
+    'undefined' != typeof module && (module.exports = microdown);
+  </script>
 </head>
 <body>
 
@@ -69,36 +158,75 @@
   };
 </script>
 
-<script src="../src/index.js"></script>
-
 <textarea id="input" onkeyup="updateResult()">
-# h1
-## h2
-### h3
-#### h4
-##### h5
-###### h6
+
+""" center
+![coding.international logo](https://coding.international/assets/img/logo.svg)
+
+-------------------------
+# micro-down
+=========================
+"""
+
+**1.05kB** JavaScript markdown parser
+  [view on GitHub](https://github.com/shynrou/micro-down)
+
+""" navigation
+[Inline Markup](#inline)
+[Blocks](#blocks)
+[Lists](#lists)
+[Table](#table)
+"""
+
+#[inline]
+## Inline Markup
+
+_italic:_ `*italic* _italic_`
+
+__bold:__ `**bold** __bold__`
+
+___bold italic:___ `***bold italic*** ___bold italic___`
+
+```
+code: `code`
+```
+
+~underline:~ `~underline~`
+
+~~strike through:~~ `~~strike through~~`
+
+~~~deleted:~~~ `~~~deleted~~~`
 
 
-Rules require at least three consecutive - or =
----
--------------------------------------------
-===
-===========================================
+#[blocks]
+## Blocks
 
-`*italic* _italic_:` *italic* _italic_
 
-`**bold** __bold__:` **bold** __bold__
+""" center navigation
+Div Blocks are surrounded by """ and can receive a classes.
+"""
 
-`***bold italic*** ___bold italic___:` ***bold italic*** ___bold italic___
+``` not_javascript
+Pre formatted blocks can be defined with ``` surrounding them, they can also receive classes.
+```
 
+> Block quotes can also be handy.
+>   They are very nice to get some interresting content
+>
+
+> "Blocks in general support _~inline~_ __styles__"
+
+
+#[media]
+## Media
 
 [github](http://github.com Just a hover text!)
-![Nope no image here](http://github.com Just a hover text!)
 ![github](https://assets-cdn.github.com/images/modules/logos_page/GitHub-Logo.png Git hub logo)
-&[400,280,0 project-card](http://lab.lepture.com/github-cards/cards/medium.html?user=shynrou&identity=ghcard-shynrou-7&repo=micro-down&client_id=a11a1bda412d928fb39a&client_secret=92b7cf30bc42c49d589a10372c3f9ff3bb310037)
 
+&[400,280,0 project-card](https://coding.international/standalone/github-project-card?project=micro-down&user=shynrou)
 
+#[lists]
+## lists
 
 1. a
   1. **a1**
@@ -112,39 +240,12 @@ Rules require at least three consecutive - or =
 - Welt
 + !!!
 
-``` javascript
-
-## Markdown
-
-  *looks*
-  **like**
-  ***this***
-```
-
-""" red
-While this is a simple div block
-, where markdown rules apply
-
-### headlines
-- und
-  - listen
-"""
-
-
-
-> #blockquote
-> This is a block quote
-> and it can **continue** after
-> a new line,
->
-> + even lists
->   1. and
->
-> | tables | work | here!
-
+#[table]
+## Table
 
 |-this   -|-is     -|-a  -
 | really  | useless | table
+| even more | useless | row
 
 </textarea>
 
