@@ -2,7 +2,7 @@ const microdown = function () {
   /*
    * tag helper
    */
-  var t = (tag, text, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => `${k}="${values[k]}"`) : '')}>${text}</${tag}>`,
+  var t = (tag, text, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => `${k}="${values[k] || ''}"`).join(' ') : '')}>${text}</${tag}>`,
     /**
      * outdent all rows by first as reference
      */
@@ -66,11 +66,11 @@ const microdown = function () {
 
       // iframe
       /\&\[(?:(.+),(.+),([^ ]+))?( ?.+)?\]\((.*?)?\)/g,
-      '<iframe src="$5" class="$4" width="$1" height="$2" frameborder="$3"></iframe>',
+      (match, width, height, frameborder, c, src) => t('iframe', '', { width, height, frameborder, class: c, src}),
 
-      // link
-      /\!\[(.*)\]\(([^\s]*)( (.*))?\)/g,
-      '<img src="$2" alt="$1" title="$4"/>',
+      // image
+      /\!\[(.*)\]\(([^\s]*)(?: (.*))?\)/g,
+      (match, alt, src, title) => t('img', '', { src, alt, title }),
 
       // links
       /\[(.*)\]\(([^\s]*)( .*)?\)/g,

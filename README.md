@@ -2,7 +2,7 @@
 
 JavaScript based Markdown parser with no dependencies.
 
-**<1kB** markdown parser *(gzipped + minified)*
+**1.03kB** markdown parser *(gzipped + minified)*
 
 ## support:
 - Headlines: `### Headline`
