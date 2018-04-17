@@ -22,9 +22,10 @@ npm install -S micro-down
     - div blocks: `""" just a div block """`
     - blockquotes: `> something`
     - class support
-- IFrames: `&[class](url)` `&[width,height,frame class](url)` 
+- Anchors: `#[jump-here]`
 - Links: `[Label](destination Title)`
 - Images: `![label](source altText))`
+- IFrames: `&[class](url)` `&[width,height,frame class](url)`
 - Lists:
     - Unordered lists using: `+` and `-`
     - Ordered lists using: `1.`
