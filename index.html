@@ -174,9 +174,7 @@
 
     <script>
       const updateResult = function () {
-        var result = microdown.parse(document.getElementById('input').value);
-        console.log(result);
-        document.getElementById('result').innerHTML = result;
+        document.getElementById('result').innerHTML = microdown.parse(document.getElementById('input').value);
       };
     </script>
 
