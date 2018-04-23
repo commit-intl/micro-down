@@ -4,7 +4,7 @@ JavaScript based Markdown parser with no dependencies.
 
 **1.05kB** markdown parser *(gzipped + minified)*
 
-[check out this demo](https://shynrou.github.io/micro-down)
+[check out this demo](https://coding-intl.github.io/micro-down)
 
 
 ```
