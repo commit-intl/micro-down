@@ -10,6 +10,12 @@ const microdown = function () {
       return text.replace(new RegExp('^' + (text.match(/^[^\s]?\s+/) || '')[0], 'gm'), '');
     },
     /**
+     * encode existing HTML tags to entities in a string
+     */
+    e = (text) => {
+        return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    /**
      * recursive list parser
      */
     l = (text, temp) => {
@@ -62,7 +68,7 @@ const microdown = function () {
 
       // extrude pre format inline
       /`([^`]*)`/g,
-      (match, text) => t('code', text),
+      (match, text) => t('code', e(text)),
 
       //anchor
       /#\[([^\]]+)\]/g,
