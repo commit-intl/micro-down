@@ -15,7 +15,7 @@ const microdown = function () {
     l = (text, temp) => {
       temp = text.match(/^[+-]/m) ? 'ul' : 'ol';
       return text ?
-        `<${temp}>${text.replace(/(?:[+-]|\d+\.) +(.*)\n?((  .*\n?)*)/g, (match, a, b) => `<li>${inline(`${a}\n${o(b || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n  +.*)*))+/g, l)}`)}</li>`)}</${temp}>`
+        `<${temp}>${text.replace(/(?:[+-]|\d+\.) +(.*)\n?(([ \t].*\n?)*)/g, (match, a, b) => `<li>${inline(`${a}\n${o(b || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g, l)}`)}</li>`)}</${temp}>`
         : '';
     },
 
@@ -46,7 +46,7 @@ const microdown = function () {
       ),
 
       // lists
-      /(?:(^|\n)([+-]|\d+\.) +(.*(\n  +.*)*))+/g,
+      /(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
       l,
 
       // headlines
