@@ -10,10 +10,10 @@ const microdown = function () {
       return text.replace(new RegExp('^' + (text.match(/^[^\s]?\s+/) || '')[0], 'gm'), '');
     },
     /**
-     * encode existing HTML tags to entities in a string
+     * encode double quotes and HTML tags to entities
      */
     e = (text) => {
-        return text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return text !== undefined ? text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
     }
     /**
      * recursive list parser
