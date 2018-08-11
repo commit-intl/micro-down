@@ -2,7 +2,7 @@ const microdown = function () {
   /*
    * tag helper
    */
-  var t = (tag, text, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => `${k}="${values[k] || ''}"`).join(' ') : '')}>${text}</${tag}>`,
+  var t = (tag, text, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => `${k}="${e(values[k]) || ''}"`).join(' ') : '')}>${text}</${tag}>`,
     /**
      * outdent all rows by first as reference
      */
@@ -13,7 +13,7 @@ const microdown = function () {
      * encode existing HTML tags to entities in a string
      */
     e = (text) => {
-        return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
     /**
      * recursive list parser
