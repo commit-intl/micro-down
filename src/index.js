@@ -37,7 +37,7 @@ const microdown = function () {
       (match, wrapper, c, text, tag) =>
         wrapper === '"""' ?
           t('div', parse(text), { class: c })
-          : t('pre', text, { class: c }),
+          : t('pre', e(text), { class: c }),
 
       // blockquotes
       /(^>.*\n?)+/gm,
