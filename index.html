@@ -139,11 +139,11 @@
         }, g = function (a) {
           return h(a, [/`([^`]*)`/g, function (a, c) {
             return b('code', c)
-          }, /#\[([^\]]+)\]/g, '<a name="$1"/>', /\&\[(?:(.+),(.+),([^ ]+))?( ?.+)?\]\((.*?)?\)/g, function (a, d, e, f, g, h) {
+          }, /#\[([^\]]+)\]/g, '<a name="$1"/>', /\&\[(?:(.+),(.+),([^ \]]+))?( ?.+?)?\]\((.*?)?\)/g, function (a, d, e, f, g, h) {
             return b('iframe', '', { width: d, height: e, frameborder: f, class: g, src: h })
-          }, /\!\[(.*)\]\(([^\s]*)(?: (.*))?\)/g, function (a, c, d, e) {
+          }, /\!\[(.*?)\]\(([^\s]*?)(?: (.*?))?\)/g, function (a, c, d, e) {
             return b('img', '', { src: d, alt: c, title: e })
-          }, /\[(.*)\]\(([^\s]*)( .*)?\)/g, function (a, c, d, e) {
+          }, /\[(.*?)\]\(([^\s]*?)( .*?)?\)/g, function (a, c, d, e) {
             return b('a', g(c), { href: d, title: e })
           }, /([\*_]{1,3})((.|\n)+?)\1/g, function (a, c, d) {
             return c = c.length, d = g(d), 1 < c && (d = b('b', d)), c % 2 && (d = b('i', d)), d
@@ -159,11 +159,15 @@
           }
           return b
         }, i = function (a) {
-          a = a.replace(/[\r\v\b\f]/g, '');
+          a = a.replace(/[\r\v\b\f]/g, '').replace(/\\./g, function (a) {
+            return '&#' + a.charCodeAt(1) + ';'
+          });
           var c = f(a);
           return c !== a || c.match(/^[\s\n]*$/i) || (c = c.trim().replace(/((.|\n)+?)(\n\n+|$)/g, function (a, c) {
             return b('p', g(c))
-          })), c
+          })), c.replace(/&#(\d+);/g, function (a, b) {
+            return String.fromCharCode(Number.parseInt(b))
+          })
         };
         return { parse: i, inline: g }
       }();

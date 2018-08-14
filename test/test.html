@@ -72,79 +72,96 @@
 <script src="../src/index.js"></script>
 
 <textarea id="input" onkeyup="updateResult()">
-# h1
-## h2
-### h3
-#### h4
-##### h5
-###### h6
+""" center
+![micro-down logo](https://coding.international/assets/projects/microdown/microdown.svg)
 
-
-Rules require at least three consecutive - or =
----
--------------------------------------------
-===
-===========================================
-
-`*italic* _italic_:` *italic* _italic_
-
-`**bold** __bold__:` **bold** __bold__
-
-`***bold italic*** ___bold italic___:` ***bold italic*** ___bold italic___
-
-
-[github](http://github.com Just a hover text!)
-![Nope no image here](http://github.com Just a hover text!)
-![github](https://assets-cdn.github.com/images/modules/logos_page/GitHub-Logo.png Git hub logo)
-&[400,280,0 project-card](http://lab.lepture.com/github-cards/cards/medium.html?user=shynrou&identity=ghcard-shynrou-7&repo=micro-down&client_id=a11a1bda412d928fb39a&client_secret=92b7cf30bc42c49d589a10372c3f9ff3bb310037)
-
-
-
-1. a
-  1. **a1**
-  2. a2
-2. b
-  - b1
-  - b2
-3. c
-
-- Hallo
-- Welt
-+ !!!
-
-``` javascript
-
-## Markdown
-
-  *looks*
-  **like**
-  ***this***
-```
-
-""" red
-While this is a simple div block
-, where markdown rules apply
-
-### headlines
-- und
-  - listen
+-------------------------
+# micro-down
+=========================
 """
 
+**1.05kB** JavaScript markdown parser
+  [view on GitHub](https://github.com/shynrou/micro-down)
+
+""" navigation
+[Inline Markup](#inline)
+[Blocks](#blocks)
+[Lists](#lists)
+[Table](#table)
+"""
+
+#[inline]
+## Inline Markup
+
+_italic:_ `*italic* _italic_`
+
+__bold:__ `**bold** __bold__`
+
+___bold italic:___ `***bold italic*** ___bold italic___`
+
+```
+code: `code`
+```
+
+~underline:~ `~underline~`
+
+~~strike through:~~ `~~strike through~~`
+
+~~~deleted:~~~ `~~~deleted~~~`
 
 
-> #blockquote
-> This is a block quote
-> and it can **continue** after
-> a new line,
+#[blocks]
+## Blocks
+
+
+""" center gray
+Div Blocks are surrounded by """ and can receive a classes.
+"""
+
+``` not_javascript
+Pre
+  formatted
+    blocks
+    can
+    be defined
+  with ``` surrounding them,
+  they can also receive classes.
+```
+
+> Block quotes can also be handy.
+>   They are very nice to get some interresting content
 >
-> + even lists
->   1. and
->
-> | tables | work | here!
 
+> "Blocks in general support _~inline~_ __styles__"
+
+
+#[media]
+## Media
+
+[github](http://github.com Just a hover text!)
+![github](https://assets-cdn.github.com/images/modules/logos_page/GitHub-Logo.png Git hub logo)
+
+&[400,280,0 project-card](https://coding.international/standalone/github-project-card?project=micro-down&user=shynrou)
+
+#[lists]
+## lists
+
+1. Lists can be structured and layered
+  1. like this
+  2. for example
+2. __and can also be mixed__
+  - like
+  + this
+3. _~inline works here to~_
+   and can be quite handy
+
+
+#[table]
+## Table
 
 |-this   -|-is     -|-a  -
 | really  | useless | table
+| even more | useless | row
 
 </textarea>
 

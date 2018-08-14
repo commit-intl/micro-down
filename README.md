@@ -15,7 +15,7 @@ npm install -S micro-down
 - Headlines: `### Headline`
 - Inline:
     - `*italic*, **bold**, ***bold italic***`
-    - \``_code_="- something";`\`
+    - \``_code_="- something";`\` or direct escaping with \\
     - `~underline~, ~~strike through~~, ~~~deleted~~~`
 - Blocks:
     - pre format blocks: surrounded by  \`\`\`

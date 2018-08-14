@@ -69,15 +69,15 @@ const microdown = function () {
       '<a name="$1"/>',
 
       // iframe
-      /\&\[(?:(.+),(.+),([^ ]+))?( ?.+)?\]\((.*?)?\)/g,
+      /\&\[(?:(.+),(.+),([^ \]]+))?( ?.+?)?\]\((.*?)?\)/g,
       (match, width, height, frameborder, c, src) => t('iframe', '', { width, height, frameborder, class: c, src}),
 
       // image
-      /\!\[(.*)\]\(([^\s]*)(?: (.*))?\)/g,
+      /\!\[(.*?)\]\(([^\s]*?)(?: (.*?))?\)/g,
       (match, alt, src, title) => t('img', '', { src, alt, title }),
 
       // links
-      /\[(.*)\]\(([^\s]*)( .*)?\)/g,
+      /\[(.*?)\]\(([^\s]*?)( .*?)?\)/g,
       (match, text, href, title) => t('a', inline(text), { href, title }),
 
       // bold, italic, bold & italic
@@ -111,12 +111,15 @@ const microdown = function () {
       return text;
     },
     parse = (text) => {
-      text = text.replace(/[\r\v\b\f]/g, '');
+      text = text
+        .replace(/[\r\v\b\f]/g, '')
+        .replace(/\\./g, (match) => `&#${match.charCodeAt(1)};`);
       var temp = block(text);
       if (temp === text && !temp.match(/^[\s\n]*$/i)) {
         temp = temp.trim().replace(/((.|\n)+?)(\n\n+|$)/g, (match, text) => t('p', inline(text)));
       }
-      return temp;
+      return temp
+        .replace(/&#(\d+);/g, (match, code) => String.fromCharCode(Number.parseInt(code)));
     }
   ;
 
