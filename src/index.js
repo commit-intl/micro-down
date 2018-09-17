@@ -2,12 +2,18 @@ const microdown = function () {
   /*
    * tag helper
    */
-  var t = (tag, text, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => `${k}="${values[k] || ''}"`).join(' ') : '')}>${text}</${tag}>`,
+  var t = (tag, text, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => `${k}="${e(values[k]) || ''}"`).join(' ') : '')}>${text}</${tag}>`,
     /**
      * outdent all rows by first as reference
      */
     o = (text) => {
       return text.replace(new RegExp('^' + (text.match(/^[^\s]?\s+/) || '')[0], 'gm'), '');
+    },
+    /**
+     * encode double quotes and HTML tags to entities
+     */
+    e = (text) => {
+        return text !== undefined ? text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
     },
     /**
      * recursive list parser
@@ -31,7 +37,7 @@ const microdown = function () {
       (match, wrapper, c, text, tag) =>
         wrapper === '"""' ?
           t('div', parse(text), { class: c })
-          : t('pre', text, { class: c }),
+          : t('pre', e(text), { class: c }),
 
       // blockquotes
       /(^>.*\n?)+/gm,
@@ -62,7 +68,7 @@ const microdown = function () {
 
       // extrude pre format inline
       /`([^`]*)`/g,
-      (match, text) => t('code', text),
+      (match, text) => t('code', e(text)),
 
       //anchor
       /#\[([^\]]+)\]/g,
