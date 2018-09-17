@@ -2,7 +2,7 @@
 
 JavaScript based Markdown parser with no dependencies.
 
-**1.18kB** markdown parser *(gzipped + minified)*
+**1.2kB** markdown parser *(gzipped + minified)*
 
 [check out this demo](https://coding-intl.github.io/micro-down)
 
@@ -25,6 +25,7 @@ npm install -S micro-down
 - Anchors: `#[jump-here]`
 - Links: `[Label](destination Title)`
 - Images: `![label](source altText))`
+    - linked: `[![label](source altText))](destination Title)`
 - IFrames: `&[class](url)` `&[width,height,frame class](url)`
 - Lists:
     - Unordered lists using: `+` and `-`

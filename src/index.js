@@ -59,6 +59,10 @@ const microdown = function () {
       /(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
       l,
 
+      //anchor
+      /#\[([^\]]+?)]/g,
+      '<a name="$1"></a>',
+
       // headlines
       /^(#+) +(.*)(?:$)/gm,
       (match, h, text) => t('h' + h.length, inline(text)),
@@ -74,24 +78,20 @@ const microdown = function () {
       /`([^`]*)`/g,
       (match, text) => t('code', e(text)),
 
-      //anchor
-      /#\[([^\]]+)\]/g,
-      '<a name="$1"/>',
-
-      // iframe
-      /\&\[(?:(.+),(.+),([^ \]]+))?( ?.+?)?\]\((.*?)?\)/g,
-      (match, width, height, frameborder, c, src) => t('iframe', '', { width, height, frameborder, class: c, src}),
-
-      // image
-      /\!\[(.*?)\]\(([^\s]*?)(?: (.*?))?\)/g,
-      (match, alt, src, title) => t('img', '', { src, alt, title }),
-
       // links
-      /\[(.*?)\]\(([^\s]*?)( .*?)?\)/g,
-      (match, text, href, title) => t('a', inline(text), { href, title }),
+      /[!&]?\[([!&]?\[.*?\)|[^\]]*?)]\((.*?)( .*?)?\)/g,
+      (match, text, href, title) => {
+        if(match[0] == '&') {
+          text = text.match(/^(.+),(.+),([^ \]]+)( ?.+?)?$/);
+          return t('iframe', '', { width: text[1], height: text[2], frameborder: text[3], class: text[4], src: href, title})
+        }
+        return match[0] == '!'
+          ? t('img', '', { src: href, alt: text, title })
+          : t('a', inline(text), { href, title });
+      },
 
       // bold, italic, bold & italic
-      /([\*_]{1,3})((.|\n)+?)\1/g,
+      /([*_]{1,3})((.|\n)+?)\1/g,
       (match, k, text) => {
         k = k.length;
         text = inline(text);
