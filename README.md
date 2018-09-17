@@ -2,7 +2,7 @@
 
 JavaScript based Markdown parser with no dependencies.
 
-**1.12kB** markdown parser *(gzipped + minified)*
+**1.18kB** markdown parser *(gzipped + minified)*
 
 [check out this demo](https://coding-intl.github.io/micro-down)
 
@@ -32,3 +32,4 @@ npm install -S micro-down
     - Nested lists
 - Tables: `| some | text |`
     - Header row: `|- header -|- row -|`
+- Comments `<!-- # Comment -->`

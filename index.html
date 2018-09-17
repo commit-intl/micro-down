@@ -1,191 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>micro-down</title>
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,400i,700" rel="stylesheet">
-    <style>
+<head>
+  <meta charset="UTF-8">
+  <title>micro-down</title>
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,400i,700" rel="stylesheet">
+  <style>
 
-      html {
-        font-family: "Ubuntu", sans-serif;
-      }
+    html {
+      font-family: "Ubuntu", sans-serif;
+    }
 
-      body {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        display: flex;
-        flex-direction: row;
-        margin: 0;
-        max-height: 100vh;
-      }
+    body {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      flex-direction: row;
+      margin: 0;
+      max-height: 100vh;
+    }
 
-      h1, h2, h3, h4, h5, h6 {
-        line-height: 1;
-      }
+    h1, h2, h3, h4, h5, h6 {
+      line-height: 1;
+    }
 
-      h2, h3, h4, h5, h6 {
-        margin-top: 50px;
-      }
+    h2, h3, h4, h5, h6 {
+      margin-top: 50px;
+    }
 
-      img {
-        max-width: 100%;
-      }
+    img {
+      max-width: 100%;
+    }
 
-      #input {
-        height: 100vh;
-        width: 50%;
-        resize: none;
-        padding: 0;
-        margin: 0;
-        border: none;
-      }
+    #input {
+      height: 100vh;
+      width: 50%;
+      resize: none;
+      padding: 0;
+      margin: 0;
+      border: none;
+    }
 
-      #result {
-        float: left;
-        display: inline-block;
-        box-sizing: border-box;
-        width: 50%;
-        height: 100vh;
-        padding: 1rem;
-        margin: 0;
-        overflow: auto;
-        scroll-behavior: smooth;
-      }
+    #result {
+      float: left;
+      display: inline-block;
+      box-sizing: border-box;
+      width: 50%;
+      height: 100vh;
+      padding: 1rem;
+      margin: 0;
+      overflow: auto;
+      scroll-behavior: smooth;
+    }
 
-      .red {
-        color: red;
-      }
+    .red {
+      color: red;
+    }
 
-      .gray {
-        background: #cccccc;
-      }
+    .gray {
+      background: #cccccc;
+    }
 
-      .logo {
-        max-width: 200px;
-        height: auto;
-      }
+    .logo {
+      max-width: 200px;
+      height: auto;
+    }
 
-      th, td {
-        padding: 2px 15px 2px 2px;
-        border-bottom: 1px solid #666;
-        background: #ffffff;
-      }
+    th, td {
+      padding: 2px 15px 2px 2px;
+      border-bottom: 1px solid #666;
+      background: #ffffff;
+    }
 
-      th:nth-child(odd) {
-        background: #ffF9ee;
-      }
+    th:nth-child(odd) {
+      background: #ffF9ee;
+    }
 
-      td:nth-child(odd) {
-        background: #ffF9ee;
-      }
+    td:nth-child(odd) {
+      background: #ffF9ee;
+    }
 
-      blockquote {
-        padding: 4px;
-        background: #ffffdd;
-        box-shadow: 2px 2px 4px #999999;
-        border: 1px solid #cccccc;
-      }
+    blockquote {
+      padding: 4px;
+      background: #ffffdd;
+      box-shadow: 2px 2px 4px #999999;
+      border: 1px solid #cccccc;
+    }
 
-      .center {
-        text-align: center;
-      }
+    .center {
+      text-align: center;
+    }
 
-      .navigation {
-        background-color: #D6EDFF;
-        padding: .1rem 1rem;
-      }
+    .navigation {
+      background-color: #D6EDFF;
+      padding: .1rem 1rem;
+    }
 
-      .navigation a:hover {
-        background-color: #006FED;
-      }
+    .navigation a:hover {
+      background-color: #006FED;
+    }
 
-      .navigation a {
-        display: inline-block;
-        padding: .5rem 1rem;
-        background-color: #008DFE;
-        color: #FFFFFF;
-        text-decoration: none;
-      }
+    .navigation a {
+      display: inline-block;
+      padding: .5rem 1rem;
+      background-color: #008DFE;
+      color: #FFFFFF;
+      text-decoration: none;
+    }
 
-    </style>
-    <script>
-      'use strict';
-      var microdown = function () {
-        var a = this, b = function (a, b, c) {
-          return '<' + (a + (c ? ' ' + Object.keys(c).map(function (a) {
-            return a + '="' + (c[a] || '') + '"'
-          }).join(' ') : '')) + '>' + b + '</' + a + '>'
-        }, c = function (a) {
-          return a.replace(new RegExp('^' + (a.match(/^[^\s]?\s+/) || '')[0], 'gm'), '')
-        }, d = function (a, b) {
-          return b = a.match(/^[+-]/m) ? 'ul' : 'ol', a ? '<' + b + '>' + a.replace(/(?:[+-]|\d+\.) +(.*)\n?((  .*\n?)*)/g, function (e, f, a) {
-            return '<li>' + g(f + '\n' + c(a || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n  +.*)*))+/g, d)) + '</li>'
-          }) + '</' + b + '>' : ''
-        }, e = function (a, c, d) {
-          return function (e) {
-            return b(a, g(e.replace(c, d)))
-          }
-        }, f = function (a) {
-          return h(a, [/^("""|```)(.*)(\n(.*\n)*?)\1/gm, function (a, d, e, f) {
-            return '"""' === d ? b('div', i(f), { class: e }) : b('pre', f, { class: e })
-          }, /(^>.*\n?)+/gm, e('blockquote', /^> ?(.*)$/gm, '$1'), /((^|\n)\|.+)+/g, e('table', /^.*$/gm, e('tr', /\|(-?)([^|]+)\1(\|$)?/gm, function (a, c, d) {
-            return b(c ? 'th' : 'td', g(d))
-          })), /(?:(^|\n)([+-]|\d+\.) +(.*(\n  +.*)*))+/g, d, /^(#+) +(.*)(?:$)/gm, function (a, c, d) {
-            return b('h' + c.length, g(d))
-          }, /^(===+|---+)(?=\s*$)/gm, '<hr>'], i)
-        }, g = function (a) {
-          return h(a, [/`([^`]*)`/g, function (a, c) {
-            return b('code', c)
-          }, /#\[([^\]]+)\]/g, '<a name="$1"/>', /\&\[(?:(.+),(.+),([^ \]]+))?( ?.+?)?\]\((.*?)?\)/g, function (a, d, e, f, g, h) {
-            return b('iframe', '', { width: d, height: e, frameborder: f, class: g, src: h })
-          }, /\!\[(.*?)\]\(([^\s]*?)(?: (.*?))?\)/g, function (a, c, d, e) {
-            return b('img', '', { src: d, alt: c, title: e })
-          }, /\[(.*?)\]\(([^\s]*?)( .*?)?\)/g, function (a, c, d, e) {
-            return b('a', g(c), { href: d, title: e })
-          }, /([\*_]{1,3})((.|\n)+?)\1/g, function (a, c, d) {
-            return c = c.length, d = g(d), 1 < c && (d = b('b', d)), c % 2 && (d = b('i', d)), d
-          }, /(~{1,3})((.|\n)+?)\1/g, function (a, c, d) {
-            return b([, 'u', 's', 'del'][c.length], g(d))
-          }, /  \n|\n  /g, '<br>'], g)
-        }, h = function (b, c, d) {
-          for (var e, f = 0; f < c.length;) {
-            if (e = c[f++].exec(b)) return d(b.slice(0, e.index)) + ('string' == typeof c[f] ? c[f].replace(/\$(\d)/g, function (a, b) {
-              return e[b]
-            }) : c[f].apply(a, e)) + d(b.slice(e.index + e[0].length));
-            f++
-          }
-          return b
-        }, i = function (a) {
-          a = a.replace(/[\r\v\b\f]/g, '').replace(/\\./g, function (a) {
-            return '&#' + a.charCodeAt(1) + ';'
-          });
-          var c = f(a);
-          return c !== a || c.match(/^[\s\n]*$/i) || (c = c.trim().replace(/((.|\n)+?)(\n\n+|$)/g, function (a, c) {
-            return b('p', g(c))
-          })), c.replace(/&#(\d+);/g, function (a, b) {
-            return String.fromCharCode(Number.parseInt(b))
-          })
-        };
-        return { parse: i, inline: g }
-      }();
-      'undefined' != typeof module && (module.exports = microdown);
-    </script>
-  </head>
-  <body>
-
-    <script>
-      const updateResult = function () {
-        document.getElementById('result').innerHTML = microdown.parse(document.getElementById('input').value);
+  </style>
+  <script>
+    'use strict';
+    var microdown = function () {
+      var a = this, b = function (a, b, c) {
+        return '<' + (a + (c ? ' ' + Object.keys(c).map(function (a) {
+          return a + '="' + (d(c[a]) || '') + '"'
+        }).join(' ') : '')) + '>' + b + '</' + a + '>'
+      }, c = function (a) {
+        return a.replace(new RegExp('^' + (a.match(/^[^\s]?\s+/) || '')[0], 'gm'), '')
+      }, d = function (a) {
+        return a === void 0 ? '' : a.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      }, e = function (a, b) {
+        return b = a.match(/^[+-]/m) ? 'ul' : 'ol', a ? '<' + b + '>' + a.replace(/(?:[+-]|\d+\.) +(.*)\n?(([ \t].*\n?)*)/g, function (d, f, a) {
+          return '<li>' + i(f + '\n' + c(a || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g, e)) + '</li>'
+        }) + '</' + b + '>' : ''
+      }, f = function (a, c, d) {
+        return function (e) {
+          return b(a, i(e.replace(c, d)))
+        }
+      }, g = function (a) {
+        return h(a, [/<!--((.|\n)*?)-->/g, '<!--$1-->', /^("""|```)(.*)(\n(.*\n)*?)\1/gm, function (a, e, f, g) {
+          return '"""' === e ? b('div', j(g), {class: f}) : b('pre', d(g), {class: f})
+        }, /(^>.*\n?)+/gm, f('blockquote', /^> ?(.*)$/gm, '$1'), /((^|\n)\|.+)+/g, f('table', /^.*$/gm, f('tr', /\|(-?)([^|]+)\1(\|$)?/gm, function (a, c, d) {
+          return b(c ? 'th' : 'td', i(d))
+        })), /(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g, e, /^(#+) +(.*)(?:$)/gm, function (a, c, d) {
+          return b('h' + c.length, i(d))
+        }, /^(===+|---+)(?=\s*$)/gm, '<hr>'], j)
+      }, i = function (a) {
+        return h(a, [/`([^`]*)`/g, function (a, c) {
+          return b('code', d(c))
+        }, /#\[([^\]]+)\]/g, '<a name="$1"/>', /\&\[(?:(.+),(.+),([^ \]]+))?( ?.+?)?\]\((.*?)?\)/g, function (a, d, e, f, g, h) {
+          return b('iframe', '', {width: d, height: e, frameborder: f, class: g, src: h})
+        }, /\!\[(.*?)\]\(([^\s]*?)(?: (.*?))?\)/g, function (a, c, d, e) {
+          return b('img', '', {src: d, alt: c, title: e})
+        }, /\[(.*?)\]\(([^\s]*?)( .*?)?\)/g, function (a, c, d, e) {
+          return b('a', i(c), {href: d, title: e})
+        }, /([\*_]{1,3})((.|\n)+?)\1/g, function (a, c, d) {
+          return c = c.length, d = i(d), 1 < c && (d = b('b', d)), c % 2 && (d = b('i', d)), d
+        }, /(~{1,3})((.|\n)+?)\1/g, function (a, c, d) {
+          return b([, 'u', 's', 'del'][c.length], i(d))
+        }, /  \n|\n  /g, '<br>'], i)
+      }, h = function (b, c, d) {
+        for (var e, f = 0; f < c.length;) {
+          if (e = c[f++].exec(b)) return d(b.slice(0, e.index)) + ('string' == typeof c[f] ? c[f].replace(/\$(\d)/g, function (a, b) {
+            return e[b]
+          }) : c[f].apply(a, e)) + d(b.slice(e.index + e[0].length));
+          f++
+        }
+        return b
+      }, j = function (a) {
+        a = a.replace(/[\r\v\b\f]/g, '').replace(/\\./g, function (a) {
+          return '&#' + a.charCodeAt(1) + ';'
+        });
+        var c = g(a);
+        return c !== a || c.match(/^[\s\n]*$/i) || (c = c.trim().replace(/((.|\n)+?)(\n\n+|$)/g, function (a, c) {
+          return b('p', i(c))
+        })), c.replace(/&#(\d+);/g, function (a, b) {
+          return String.fromCharCode(Number.parseInt(b))
+        })
       };
-    </script>
+      return {parse: j, inline: i}
+    }();
+    'undefined' != typeof module && (module.exports = microdown);
+  </script>
+</head>
+<body>
+
+<script>
+  const updateResult = function () {
+    document.getElementById('result').innerHTML = microdown.parse(document.getElementById('input').value);
+  };
+</script>
 
 
-    <div id="result"></div>
+<div id="result"></div>
 
-    <textarea id="input" onkeyup="updateResult()">
+<textarea id="input" onkeyup="updateResult()">
 
 """ center
 ![micro-down logo](https://coding.international/assets/projects/microdown/microdown.svg)
@@ -195,7 +197,7 @@
 =========================
 """
 
-**1.05kB** JavaScript markdown parser
+**1.18kB** JavaScript markdown parser
   [view on GitHub](https://github.com/shynrou/micro-down)
 
 """ navigation
@@ -209,7 +211,7 @@
 #[inline]
 ## Inline Markup
 
-_italic:_ `*italic* _italic_`
+_italic:_ \*italic\* \_italic\_
 
 __bold:__ `**bold** __bold__`
 
@@ -242,6 +244,8 @@ Pre
     be defined
   with ``` surrounding them,
   they can also receive classes.
+  
+	Tabs work here too!
 ```
 
 > Block quotes can also be handy.
@@ -254,10 +258,24 @@ Pre
 #[media]
 ## Media
 
+### Links
+``` markdown
 [github](http://github.com Just a hover text!)
+```
+[github](http://github.com Just a hover text!)
+
+
+### Images
+``` markdown
+![github](https://assets-cdn.github.com/images/modules/logos_page/GitHub-Logo.png Git hub logo)
+```
 ![github](https://assets-cdn.github.com/images/modules/logos_page/GitHub-Logo.png Git hub logo)
 
-&[400,280,0 project-card](https://coding.international/standalone/github-project-card?project=micro-down&user=shynrou)
+### IFrames
+``` markdown
+&[340,170,0 project-card](https://coding.international/standalone/github-project-card?project=micro-down&user=shynrou)
+```
+&[340,170,0 project-card](https://coding.international/standalone/github-project-card?project=micro-down&user=shynrou)
 
 #[lists]
 ## lists
@@ -266,8 +284,8 @@ Pre
   1. like this
   2. for example
 2. __and can also be mixed__
-  - like
-  + this
+	- like
+	+ this
 3. _~inline works here to~_
    and can be quite handy
 
@@ -281,6 +299,6 @@ Pre
 
 </textarea>
 
-    <script>updateResult();</script>
-  </body>
+<script>updateResult();</script>
+</body>
 </html>

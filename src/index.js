@@ -32,6 +32,10 @@ const microdown = function () {
     block = (text) => p(text, [
       // BLOCK STUFF ===============================
 
+      // comments
+      /<!--((.|\n)*?)-->/g,
+      '<!--$1-->',
+
       // pre format block
       /^("""|```)(.*)(\n(.*\n)*?)\1/gm,
       (match, wrapper, c, text, tag) =>
