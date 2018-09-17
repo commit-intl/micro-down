@@ -14,7 +14,7 @@ const microdown = function () {
      */
     e = (text) => {
         return text !== undefined ? text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
-    }
+    },
     /**
      * recursive list parser
      */
