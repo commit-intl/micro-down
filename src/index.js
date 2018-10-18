@@ -13,7 +13,7 @@ const microdown = function () {
      * encode double quotes and HTML tags to entities
      */
     e = (text) => {
-        return text !== undefined ? text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+      return text !== undefined ? text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
     },
     /**
      * recursive list parser
@@ -40,8 +40,8 @@ const microdown = function () {
       /^("""|```)(.*)(\n(.*\n)*?)\1/gm,
       (match, wrapper, c, text, tag) =>
         wrapper === '"""' ?
-          t('div', parse(text), { class: c })
-          : t('pre', e(text), { class: c }),
+          t('div', parse(text), {class: c})
+          : t('pre', e(text), {class: c}),
 
       // blockquotes
       /(^>.*\n?)+/gm,
@@ -51,8 +51,8 @@ const microdown = function () {
       /((^|\n)\|.+)+/g,
       m('table', /^.*$/gm,
         m('tr', /\|(-?)([^|]+)\1(\|$)?/gm,
-          (match, type, text) => t(type ? 'th' : 'td', inline(text))
-        )
+          (match, type, text) => t(type ? 'th' : 'td', inline(text)),
+        ),
       ),
 
       // lists
@@ -68,7 +68,7 @@ const microdown = function () {
 
       // horizontal rule
       /^(===+|---+)(?=\s*$)/gm,
-      '<hr>'
+      '<hr>',
     ], parse),
     inline = (text) => p(text, [
       // bold, italic, bold & italic
@@ -102,44 +102,60 @@ const microdown = function () {
       return text;
     },
     parse = (text) => {
+      // clean input
       text = text
         .replace(/[\r\v\b\f]/g, '')
         .replace(/\\./g, (match) => `&#${match.charCodeAt(1)};`);
+
       var temp = block(text),
-        inlineBlocks = [];
-      if (temp === text && !temp.match(/^[\s\n]*$/i)) {
-        // inline blocks
-        temp = temp.trim()
+        inlineBlocks = [],
+        extrudeInlineBlocks = (text) => text
           // inline code block
           .replace(
             /`([^`]*)`/g,
-            (match, text) => '\\'+inlineBlocks.push(t('code', e(text)))
+            (match, text) => '\\' + inlineBlocks.push(t('code', e(text))),
           )
           // inline media (a / img / iframe)
           .replace(
             /[!&]?\[([!&]?\[.*?\)|[^\]]*?)]\((.*?)( .*?)?\)/g,
             (match, text, href, title) => {
-              if(match[0] == '&') {
+              if (match[0] == '&') {
                 text = text.match(/^(.+),(.+),([^ \]]+)( ?.+?)?$/);
-                match = t('iframe', '', { width: text[1], height: text[2], frameborder: text[3], class: text[4], src: href, title})
+                match = t('iframe', '', {
+                  width: text[1],
+                  height: text[2],
+                  frameborder: text[3],
+                  class: text[4],
+                  src: href,
+                  title,
+                })
               }
               else {
-                match =  match[0] == '!'
-                  ? t('img', '', { src: href, alt: text, title })
-                  : t('a', text, { href, title });
+                match = match[0] == '!'
+                  ? t('img', '', {src: href, alt: text, title})
+                  : t('a', extrudeInlineBlocks(text), {href, title});
               }
-              return '\\'+inlineBlocks.push(match);
+              return '\\' + inlineBlocks.push(match);
             },
-          )
+          ),
+        injectInlineBlock = (text) => text.replace(
+          /\\(\d+)/g,
+          (match, code) => injectInlineBlock(inlineBlocks[Number.parseInt(code) - 1]),
+        );
+      if (temp === text && !temp.match(/^[\s\n]*$/i)) {
+        // inline blocks
+        temp = extrudeInlineBlocks(temp.trim())
+        // inline code block
           .replace(/((.|\n)+?)(\n\n+|$)/g, (match, text) => t('p', inline(text)));
       }
-      return temp
-        .replace(/\\(\d+)/g, (match, code) => inlineBlocks[Number.parseInt(code)-1])
+
+      // reassemble
+      return injectInlineBlock(temp)
         .replace(/&#(\d+);/g, (match, code) => String.fromCharCode(Number.parseInt(code)));
     }
   ;
 
-  return { parse, inline }
+  return {parse, inline}
 }();
 
 if (typeof module !== 'undefined') {
