@@ -58,7 +58,6 @@ const microdown = function () {
       // lists
       /(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
       l,
-
       //anchor
       /#\[([^\]]+?)]/g,
       '<a name="$1"></a>',
@@ -72,24 +71,6 @@ const microdown = function () {
       '<hr>'
     ], parse),
     inline = (text) => p(text, [
-      // INLINE STUFF ===============================
-
-      // extrude pre format inline
-      /`([^`]*)`/g,
-      (match, text) => t('code', e(text)),
-
-      // links
-      /[!&]?\[([!&]?\[.*?\)|[^\]]*?)]\((.*?)( .*?)?\)/g,
-      (match, text, href, title) => {
-        if(match[0] == '&') {
-          text = text.match(/^(.+),(.+),([^ \]]+)( ?.+?)?$/);
-          return t('iframe', '', { width: text[1], height: text[2], frameborder: text[3], class: text[4], src: href, title})
-        }
-        return match[0] == '!'
-          ? t('img', '', { src: href, alt: text, title })
-          : t('a', inline(text), { href, title });
-      },
-
       // bold, italic, bold & italic
       /([*_]{1,3})((.|\n)+?)\1/g,
       (match, k, text) => {
@@ -124,11 +105,36 @@ const microdown = function () {
       text = text
         .replace(/[\r\v\b\f]/g, '')
         .replace(/\\./g, (match) => `&#${match.charCodeAt(1)};`);
-      var temp = block(text);
+      var temp = block(text),
+        inlineBlocks = [];
       if (temp === text && !temp.match(/^[\s\n]*$/i)) {
-        temp = temp.trim().replace(/((.|\n)+?)(\n\n+|$)/g, (match, text) => t('p', inline(text)));
+        // inline blocks
+        temp = temp.trim()
+          // inline code block
+          .replace(
+            /`([^`]*)`/g,
+            (match, text) => '\\'+inlineBlocks.push(t('code', e(text)))
+          )
+          // inline media (a / img / iframe)
+          .replace(
+            /[!&]?\[([!&]?\[.*?\)|[^\]]*?)]\((.*?)( .*?)?\)/g,
+            (match, text, href, title) => {
+              if(match[0] == '&') {
+                text = text.match(/^(.+),(.+),([^ \]]+)( ?.+?)?$/);
+                match = t('iframe', '', { width: text[1], height: text[2], frameborder: text[3], class: text[4], src: href, title})
+              }
+              else {
+                match =  match[0] == '!'
+                  ? t('img', '', { src: href, alt: text, title })
+                  : t('a', text, { href, title });
+              }
+              return '\\'+inlineBlocks.push(match);
+            },
+          )
+          .replace(/((.|\n)+?)(\n\n+|$)/g, (match, text) => t('p', inline(text)));
       }
       return temp
+        .replace(/\\(\d+)/g, (match, code) => inlineBlocks[Number.parseInt(code)-1])
         .replace(/&#(\d+);/g, (match, code) => String.fromCharCode(Number.parseInt(code)));
     }
   ;

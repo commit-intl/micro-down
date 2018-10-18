@@ -1,7 +1,7 @@
 {
   "name": "micro-down",
-  "version": "1.4.1",
-  "description": "tiny 1.2kB markdown parser",
+  "version": "1.5.0",
+  "description": "tiny 1.25kB markdown parser",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src --presets es2015,babili --out-dir dist",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ShynRou/micro-down.git"
+    "url": "git+https://github.com/coding-intl/micro-down.git"
   },
   "keywords": [
     "markdown",
@@ -24,9 +24,9 @@
   "author": "Dustin Hagemeier",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/ShynRou/micro-down/issues"
+    "url": "https://github.com/coding-intl/micro-down/issues"
   },
-  "homepage": "https://github.com/ShynRou/micro-down#readme",
+  "homepage": "https://github.com/coding-intl/micro-down#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-babili": "^0.1.4",
