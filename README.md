@@ -2,7 +2,7 @@
   <img src="https://coding.international/assets/projects/microdown/microdown.svg" width="256" height="256" alt="micro-down">
 </p>
 
-#micro-down
+# micro-down
 
 JavaScript based Markdown parser without dependencies.
 
