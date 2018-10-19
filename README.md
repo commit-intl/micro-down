@@ -1,11 +1,14 @@
-# micro-down
+<p align="center">
+  <img src="https://coding.international/assets/projects/microdown/microdown.svg" width="256" height="256" alt="micro-down">
+</p>
 
-JavaScript based Markdown parser with no dependencies.
+#micro-down
 
-**1.2kB** markdown parser *(gzipped + minified)*
+JavaScript based Markdown parser without dependencies.
+
+**1.3kB** markdown parser *(gzipped + minified)*
 
 [check out this demo](https://coding-intl.github.io/micro-down)
-
 
 ```
 npm install -S micro-down
@@ -32,5 +35,5 @@ npm install -S micro-down
     - Ordered lists using: `1.`
     - Nested lists
 - Tables: `| some | text |`
-    - Header row: `|- header -|- row -|`
+    - Header row: `|- header -|- row -|` or by a following `|---`
 - Comments `<!-- # Comment -->`

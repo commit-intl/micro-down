@@ -1,9 +1,10 @@
 {
   "name": "micro-down",
-  "version": "1.5.0",
-  "description": "tiny 1.25kB markdown parser",
+  "version": "1.5.1",
+  "description": "tiny 1.3kB markdown parser",
   "main": "dist/index.js",
   "scripts": {
+    "test": "jest ./src --coverage",
     "build": "babel src --presets es2015,babili --out-dir dist",
     "prepublish": "npm run build"
   },
@@ -30,6 +31,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-babili": "^0.1.4",
-    "babel-preset-es2015": "^6.24.1"
+    "babel-preset-es2015": "^6.24.1",
+    "jest": "^23.6.0"
   }
 }
