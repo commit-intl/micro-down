@@ -72,8 +72,24 @@ describe('md.parse()', () => {
       expect(md.parse('###### I like markdown')).toEqual('<h6>I like markdown</h6>');
     });
   });
-  //
-  // describe('links & images', () => {
+
+  describe('links & images', () => {
+    it('doesnt format links', () => {
+      expect(
+        md.parse('https://en.wikipedia.org/wiki/Open_Financial_Exchange')
+      ).toEqual(
+        'https://en.wikipedia.org/wiki/Open_Financial_Exchange'
+      );
+    });
+
+    it('doesnt format markdown links', () => {
+      expect(
+        md.parse('[https://en.wikipedia.org/wiki/Open_Financial_Exchange](https://en.wikipedia.org/wiki/Open_Financial_Exchange)')
+      ).toEqual(
+        '<a href="https://en.wikipedia.org/wiki/Open_Financial_Exchange">https://en.wikipedia.org/wiki/Open_Financial_Exchange</a>'
+      );
+    });
+
   //   it('parses links', () => {
   //     expect(md.parse('[Snarkdown](http://github.com/developit/snarkdown)')).toEqual('<a href="http://github.com/developit/snarkdown">Snarkdown</a>');
   //   });
@@ -99,7 +115,7 @@ describe('md.parse()', () => {
   //   it('parses reference links without creating excessive linebreaks', () => {
   //     expect(md.parse('\nhello [World]!\n\n[world]: http://world.com')).toEqual('hello <a href="http://world.com">World</a>!');
   //   });
-  // });
+  });
   //
   // describe('lists', () => {
   //   it('parses an unordered list with *', () => {
