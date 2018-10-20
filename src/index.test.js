@@ -121,28 +121,28 @@ describe('md.parse()', () => {
       );
     });
   });
-  //
-  // describe('lists', () => {
-  //   it('parses an unordered list with *', () => {
-  //     expect(md.parse('* One\n* Two')).toEqual('<ul><li>One</li><li>Two</li></ul>');
-  //   });
-  //
-  //   it('parses an unordered list with -', () => {
-  //     expect(md.parse('- One\n- Two')).toEqual('<ul><li>One</li><li>Two</li></ul>');
-  //   });
-  //
-  //   it('parses an unordered list with +', () => {
-  //     expect(md.parse('+ One\n+ Two')).toEqual('<ul><li>One</li><li>Two</li></ul>');
-  //   });
-  //
-  //   it('parses an unordered list with mixed bullet point styles', () => {
-  //     expect(md.parse('+ One\n* Two\n- Three')).toEqual('<ul><li>One</li><li>Two</li><li>Three</li></ul>');
-  //   });
-  //
-  //   it('parses an ordered list', () => {
-  //     expect(md.parse('1. Ordered\n2. Lists\n4. Numbers are ignored')).toEqual('<ol><li>Ordered</li><li>Lists</li><li>Numbers are ignored</li></ol>');
-  //   });
-  // });
+  
+  describe('lists', () => {
+    it('parses an unordered list with *', () => {
+      expect(md.parse('* One\n* Two')).toEqual('<ul><li>One</li><li>Two</li></ul>');
+    });
+  
+    it('parses an unordered list with -', () => {
+      expect(md.parse('- One\n- Two')).toEqual('<ul><li>One</li><li>Two</li></ul>');
+    });
+  
+    it('parses an unordered list with +', () => {
+      expect(md.parse('+ One\n+ Two')).toEqual('<ul><li>One</li><li>Two</li></ul>');
+    });
+  
+    it('parses an unordered list with mixed bullet point styles', () => {
+      expect(md.parse('+ One\n* Two\n- Three')).toEqual('<ul><li>One</li><li>Two</li><li>Three</li></ul>');
+    });
+  
+    it('parses an ordered list', () => {
+      expect(md.parse('1. Ordered\n2. Lists\n4. Numbers are ignored')).toEqual('<ol><li>Ordered</li><li>Lists</li><li>Numbers are ignored</li></ol>');
+    });
+  });
   //
   // describe('line breaks', () => {
   //   it('parses two new lines as line breaks', () => {

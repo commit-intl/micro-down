@@ -19,9 +19,9 @@ const microdown = function () {
      * recursive list parser
      */
     list = (text, temp) => {
-      temp = text.match(/^[+-]/m) ? 'ul' : 'ol';
+      temp = text.match(/^[*+-]/m) ? 'ul' : 'ol';
       return text ?
-        `<${temp}>${text.replace(/(?:[+-]|\d+\.) +(.*)\n?(([ \t].*\n?)*)/g, (match, a, b) => `<li>${inlineBlock(`${a}\n${outdent(b || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g, list)}`)}</li>`)}</${temp}>`
+        `<${temp}>${text.replace(/(?:[*+-]|\d+\.) +(.*)\n?(([ \t].*\n?)*)/g, (match, a, b) => `<li>${inlineBlock(`${a}\n${outdent(b || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g, list)}`)}</li>`)}</${temp}>`
         : '';
     },
 
@@ -60,7 +60,7 @@ const microdown = function () {
       ),
 
       // lists
-      /(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
+      /(?:(^|\n)([*+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
       list,
       //anchor
       /#\[([^\]]+?)]/g,
@@ -118,7 +118,7 @@ const microdown = function () {
     },
     inline = (text) => p(text, [
       // bold, italic, bold & italic
-      /([*_]{1,3})((.|\n)+?)\1/g,
+      /([*_]{1,3})(.+?)\1/g,
       (match, k, text) => {
         k = k.length;
         text = inline(text);
