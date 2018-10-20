@@ -132,7 +132,7 @@ const microdown = function () {
       (match, k, text) => tag([, 'u', 's', 'del'][k.length], inline(text)),
 
       // replace remaining newlines with a <br>
-      /  \n|\n  /g,
+      /  \n|\n\n|\n  /g,
       '<br>',
     ], inline),
     p = (text, rules, parse) => {

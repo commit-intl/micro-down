@@ -143,17 +143,17 @@ describe('md.parse()', () => {
       expect(md.parse('1. Ordered\n2. Lists\n4. Numbers are ignored')).toEqual('<ol><li>Ordered</li><li>Lists</li><li>Numbers are ignored</li></ol>');
     });
   });
-  //
-  // describe('line breaks', () => {
-  //   it('parses two new lines as line breaks', () => {
-  //     expect(md.parse('Something with\n\na line break')).toEqual('Something with<br />a line break');
-  //   });
-  //
-  //   it('parses two spaces as a line break', () => {
-  //     expect(md.parse('Something with  \na line break')).toEqual('Something with<br />a line break');
-  //   });
-  // });
-  //
+  
+  describe('line breaks', () => {
+    it('parses two new lines as line breaks', () => {
+      expect(md.parse('Something with\n\na line break')).toEqual('<p>Something with<br>a line break</p>');
+    });
+  
+    it('parses two spaces as a line break', () => {
+      expect(md.parse('Something with  \na line break')).toEqual('<p>Something with<br>a line break</p>');
+    });
+  });
+
   // describe('code & quotes', () => {
   //   it('parses inline code', () => {
   //     expect(md.parse('Here is some code `var a = 1`.')).toEqual('Here is some code <code>var a = 1</code>.');
