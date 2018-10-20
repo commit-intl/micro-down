@@ -186,21 +186,21 @@ describe('md.parse()', () => {
   //     expect(md.parse('> - one\n> - two\n> - **three**\nhello')).toEqual('<blockquote><ul><li>one</li><li>two</li><li><strong>three</strong></li></ul></blockquote>\nhello');
   //   });
   // });
-  //
-  // describe('horizontal rules', () => {
-  //   it('should parse ---', () => {
-  //     expect(md.parse('foo\n\n---\nbar')).toEqual('foo<hr />bar');
-  //     expect(md.parse('foo\n\n----\nbar'), '----').toEqual('foo<hr />bar');
-  //     expect(md.parse('> foo\n\n---\nbar')).toEqual('<blockquote>foo</blockquote><hr />bar');
-  //   });
-  //
-  //   it('should parse * * *', () => {
-  //     expect(md.parse('foo\n* * *\nbar')).toEqual('foo<hr />bar');
-  //     expect(md.parse('foo\n* * * *\nbar'), '* * * *').toEqual('foo<hr />bar');
-  //     expect(md.parse('> foo\n\n* * *\nbar')).toEqual('<blockquote>foo</blockquote><hr />bar');
-  //   });
-  // });
-  //
+  
+  describe('horizontal rules', () => {
+    it('should parse ---', () => {
+      expect(md.parse('foo\n\n---\nbar')).toEqual('<p>foo</p><hr><p>bar</p>');
+      expect(md.parse('foo\n\n----\nbar')).toEqual('<p>foo</p><hr><p>bar</p>');
+      expect(md.parse('> foo\n---\nbar')).toEqual('<blockquote>foo</blockquote><hr><p>bar</p>');
+    });
+  
+    it('should parse * * *', () => {
+      expect(md.parse('foo\n\n* * *\nbar')).toEqual('<p>foo</p><hr><p>bar</p>');
+      expect(md.parse('foo\n\n* * * *\nbar')).toEqual('<p>foo</p><hr><p>bar</p>');
+      expect(md.parse('> foo\n* * *\nbar')).toEqual('<blockquote>foo</blockquote><hr><p>bar</p>');
+    });
+  });
+
   // describe('edge cases', () => {
   //   it('should close unclosed tags', () => {
   //     expect(md.parse('*foo')).toEqual('<em>foo</em>');

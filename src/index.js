@@ -48,7 +48,7 @@ const microdown = function () {
 
       // blockquotes
       /(^>.*\n?)+/gm,
-      chain('blockquote', /^> ?(.*)$/gm, '$1', inline),
+      chain('blockquote', /^> ?(.*)$/gm, '$1', inlineBlock),
 
       // tables
       /((^|\n)\|.+)+/g,
@@ -60,7 +60,7 @@ const microdown = function () {
       ),
 
       // lists
-      /(?:(^|\n)([*+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
+      /(?:(^|\n)(?!(?:\* )+\*)([*+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
       list,
       //anchor
       /#\[([^\]]+?)]/g,
@@ -71,7 +71,7 @@ const microdown = function () {
       (match, h, text) => tag('h' + h.length, inlineBlock(text)),
 
       // horizontal rule
-      /^(===+|---+)(?=\s*$)/gm,
+      /^(===+|---+|(?:\* )+\*)(?=\s*$)/gm,
       '<hr>',
     ], parse),
     inlineBlock = (text, dontInline) => {
