@@ -158,50 +158,57 @@ describe('md.parse()', () => {
     });
   });
 
-  // describe('code & quotes', () => {
-  //   it('parses inline code', () => {
-  //     expect(md.parse('Here is some code `var a = 1`.')).toEqual('Here is some code <code>var a = 1</code>.');
-  //   });
-  //
-  //   it('escapes inline code', () => {
-  //     expect(md.parse('a `<">` b')).toEqual('a <code>&lt;&quot;&gt;</code> b');
-  //   });
-  //
-  //   it('parses three backtricks (```) as a code block', () => {
-  //     expect(md.parse('```\nfunction codeBlocks() {\n\treturn "Can be inserted";\n}\n```')).toEqual('<pre class="code ">function codeBlocks() {\n\treturn &quot;Can be inserted&quot;;\n}</pre>');
-  //
-  //     expect(md.parse('```js\nfunction codeBlocks() {\n\treturn "Can be inserted";\n}\n```')).toEqual('<pre class="code js">function codeBlocks() {\n\treturn &quot;Can be inserted&quot;;\n}</pre>');
-  //   });
-  //
-  //   it('parses tabs as a code poetry block', () => {
-  //     expect(md.parse('\tvar a = 1')).toEqual('<pre class="code poetry">var a = 1</pre>');
-  //   });
-  //
-  //   it('escapes code/quote blocks', () => {
-  //     expect(md.parse('```\n<foo>\n```')).toEqual('<pre class="code ">&lt;foo&gt;</pre>');
-  //     expect(md.parse('\t<foo>')).toEqual('<pre class="code poetry">&lt;foo&gt;</pre>');
-  //   });
-  //
-  //   it('parses a block quote', () => {
-  //     expect(md.parse('> To be or not to be')).toEqual('<blockquote>To be or not to be</blockquote>');
-  //   });
-  //
-  //   it('parses lists within block quotes', () => {
-  //     expect(md.parse('> - one\n> - two\n> - **three**\nhello')).toEqual('<blockquote><ul><li>one</li><li>two</li><li><strong>three</strong></li></ul></blockquote>\nhello');
-  //   });
-  // });
+  describe('code & quotes', () => {
+    it('parses inline code', () => {
+      expect(md.parse('Here is some code `var a = 1`.')).toEqual('<p>Here is some code <code>var a = 1</code>.</p>');
+    });
+  
+    it('escapes inline code', () => {
+      expect(md.parse('a `<">` b')).toEqual('<p>a <code>&lt;&quot;&gt;</code> b</p>');
+    });
+  
+    it('parses three backticks (```) as a code block', () => {
+      expect(md.parse('```\nfunction codeBlocks() {\n\treturn "Can be inserted";\n}\n```')).toEqual('<pre class="code ">\nfunction codeBlocks() {\n\treturn &quot;Can be inserted&quot;;\n}\n</pre>');
+  
+      expect(md.parse('```js\nfunction codeBlocks() {\n\treturn "Can be inserted";\n}\n```')).toEqual('<pre class="code js">\nfunction codeBlocks() {\n\treturn &quot;Can be inserted&quot;;\n}\n</pre>');
+    });
+  
+    it.skip('parses tabs as a code poetry block', () => {
+      expect(md.parse('\tvar a = 1')).toEqual('<pre class="code poetry">var a = 1</pre>');
+    });
+  
+    it('escapes code/quote blocks', () => {
+      expect(md.parse('```\n<foo>\n```')).toEqual('<pre class="code ">\n&lt;foo&gt;\n</pre>');
+    });
+  
+    it.skip('escapes code/quote poetry blocks', () => {
+      expect(md.parse('\t<foo>')).toEqual('<pre class="code poetry">&lt;foo&gt;</pre>');
+    });
+  
+    it('parses a block quote', () => {
+      expect(md.parse('> To be or not to be')).toEqual('<blockquote>To be or not to be<br></blockquote>');
+    });
+  
+    it('parses multi line block quotes', () => {
+      expect(md.parse('> one\n> two\n> **three**\nhello')).toEqual('<blockquote>one<br>\ntwo<br>\n**three**<br>\n</blockquote><p>hello</p>');
+    });
+
+    it('parses lists within block quotes', () => {
+      expect(md.parse('> - one\n> - two\n> - **three**\nhello')).toEqual('<blockquote><ul><li>one<br></li><li>two<br></li><li><strong>three</strong><br></li></ul>\n</blockquote><p>hello</p>');
+    });
+  });
   
   describe('horizontal rules', () => {
     it('should parse ---', () => {
       expect(md.parse('foo\n\n---\nbar')).toEqual('<p>foo</p><hr><p>bar</p>');
       expect(md.parse('foo\n\n----\nbar')).toEqual('<p>foo</p><hr><p>bar</p>');
-      expect(md.parse('> foo\n---\nbar')).toEqual('<blockquote>foo</blockquote><hr><p>bar</p>');
+      expect(md.parse('> foo\n---\nbar')).toEqual('<blockquote>foo<br>\n</blockquote><hr><p>bar</p>');
     });
   
     it('should parse * * *', () => {
       expect(md.parse('foo\n\n* * *\nbar')).toEqual('<p>foo</p><hr><p>bar</p>');
       expect(md.parse('foo\n\n* * * *\nbar')).toEqual('<p>foo</p><hr><p>bar</p>');
-      expect(md.parse('> foo\n* * *\nbar')).toEqual('<blockquote>foo</blockquote><hr><p>bar</p>');
+      expect(md.parse('> foo\n* * *\nbar')).toEqual('<blockquote>foo<br>\n</blockquote><hr><p>bar</p>');
     });
   });
 

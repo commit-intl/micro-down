@@ -43,12 +43,12 @@ const microdown = function () {
       /^("""|```)(.*)(\n(.*\n)*?)\1/gm,
       (match, wrapper, c, text) =>
         wrapper === '"""' ?
-          tag('div', parse(text), {class: c})
-          : tag('pre', encode(text), {class: c}),
+          tag('div', parse(text), {class: 'code '+c})
+          : tag('pre', encode(text), {class: 'code '+c}),
 
       // blockquotes
       /(^>.*\n?)+/gm,
-      chain('blockquote', /^> ?(.*)$/gm, '$1', inlineBlock),
+      chain('blockquote', /^> ?(.*)/gm, '$1<br>', block),
 
       // tables
       /((^|\n)\|.+)+/g,
