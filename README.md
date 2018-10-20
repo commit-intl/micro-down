@@ -27,6 +27,7 @@ npm install -S micro-down
     - class support
 - Anchors: `#[jump-here]`
 - Links: `[Label](destination Title)`
+    - URL auto linking `https://github.com/coding-intl/micro-down`
 - Images: `![label](source altText))`
     - linked: `[![label](source altText))](destination Title)`
 - IFrames: `&[class](url)` `&[width,height,frame class](url)`
