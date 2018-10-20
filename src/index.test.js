@@ -142,6 +142,10 @@ describe('md.parse()', () => {
     it('parses an ordered list', () => {
       expect(md.parse('1. Ordered\n2. Lists\n4. Numbers are ignored')).toEqual('<ol><li>Ordered</li><li>Lists</li><li>Numbers are ignored</li></ol>');
     });
+
+    it('parses 2 space nested lists', () => {
+      expect(md.parse('2. __and can also be mixed__\n  - like\n  + and\n  * this')).toEqual('<ol><li><strong>and can also be mixed</strong>\n<ul><li>like</li><li>and</li><li>this</li></ul></li></ol>');
+    });
   });
   
   describe('line breaks', () => {
