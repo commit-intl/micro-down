@@ -25,7 +25,7 @@ describe('md.parse()', () => {
     it('parses bold italics with ___', () => {
       expect(md.inline('I ___like___ markdown')).toEqual('I <em><strong>like</strong></em> markdown');
     });
-    
+
     it('parses underline with ~', () => {
       expect(md.inline('I ~like~ markdown')).toEqual('I <u>like</u> markdown');
     });
@@ -74,47 +74,52 @@ describe('md.parse()', () => {
   });
 
   describe('links & images', () => {
-    it('doesnt format links', () => {
+    // here are some odd spaces in the result removing them adds some more bytes. IDK if it's worth it.
+    it('parses links', () => {
       expect(
-        md.parse('https://en.wikipedia.org/wiki/Open_Financial_Exchange')
+        md.inlineBlock('[markdown](https://de.wikipedia.org/wiki/Markdown And a Title)')
       ).toEqual(
-        'https://en.wikipedia.org/wiki/Open_Financial_Exchange'
+        '<a href="https://de.wikipedia.org/wiki/Markdown" title=" And a Title">markdown</a>'
       );
     });
 
-    it('doesnt format markdown links', () => {
+    it('auto format links', () => {
       expect(
-        md.parse('[https://en.wikipedia.org/wiki/Open_Financial_Exchange](https://en.wikipedia.org/wiki/Open_Financial_Exchange)')
+        md.inlineBlock('https://en.wikipedia.org/wiki/Open_Financial_Exchange')
       ).toEqual(
         '<a href="https://en.wikipedia.org/wiki/Open_Financial_Exchange">https://en.wikipedia.org/wiki/Open_Financial_Exchange</a>'
       );
     });
 
-  //   it('parses links', () => {
-  //     expect(md.parse('[Snarkdown](http://github.com/developit/snarkdown)')).toEqual('<a href="http://github.com/developit/snarkdown">Snarkdown</a>');
-  //   });
-  //
-  //   it('parses anchor links', () => {
-  //     expect(md.parse('[Example](#example)')).toEqual('<a href="#example">Example</a>');
-  //   });
-  //
-  //   it('parses images', () => {
-  //     expect(md.parse('![title](foo.png)')).toEqual('<img src="foo.png" alt="title">');
-  //     expect(md.parse('![](foo.png)')).toEqual('<img src="foo.png" alt="">');
-  //   });
-  //
-  //   it('parses images within links', () => {
-  //     expect(md.parse('[![](toc.png)](#toc)')).toEqual('<a href="#toc"><img src="toc.png" alt=""></a>');
-  //     expect(md.parse('[![a](a.png)](#a) [![b](b.png)](#b)')).toEqual('<a href="#a"><img src="a.png" alt="a"></a> <a href="#b"><img src="b.png" alt="b"></a>');
-  //   });
-  //
-  //   it('parses reference links', () => {
-  //     expect(md.parse('\nhello [World]!\n[world]: http://world.com')).toEqual('hello <a href="http://world.com">World</a>!');
-  //   });
-  //
-  //   it('parses reference links without creating excessive linebreaks', () => {
-  //     expect(md.parse('\nhello [World]!\n\n[world]: http://world.com')).toEqual('hello <a href="http://world.com">World</a>!');
-  //   });
+    it('don\'t inline link content', () => {
+      expect(
+        md.inlineBlock('[https://en.wikipedia.org/wiki/Open_Financial_Exchange](https://en.wikipedia.org/wiki/Open_Financial_Exchange)')
+      ).toEqual(
+        '<a href="https://en.wikipedia.org/wiki/Open_Financial_Exchange" >https://en.wikipedia.org/wiki/Open_Financial_Exchange</a>'
+      );
+    });
+
+    it('parses anchor links', () => {
+      expect(md.inlineBlock('[Example](#example)')).toEqual('<a href="#example" >Example</a>');
+    });
+
+    it('parses images', () => {
+      expect(md.inlineBlock('![title](foo.png)')).toEqual('<img src="foo.png" alt="title" ></img>');
+      expect(md.inlineBlock('![](foo.png)')).toEqual('<img src="foo.png"  ></img>');
+    });
+
+    it('parses images within links', () => {
+      expect(
+        md.inlineBlock('[![](toc.png)](#toc)')
+      ).toEqual(
+        '<a href="#toc" ><img src="toc.png"  ></img></a>'
+      );
+      expect(
+        md.inlineBlock('[![a](a.png)](#a) [![b](b.png)](#b)')
+      ).toEqual(
+        '<a href="#a" ><img src="a.png" alt="a" ></img></a> <a href="#b" ><img src="b.png" alt="b" ></img></a>'
+      );
+    });
   });
   //
   // describe('lists', () => {

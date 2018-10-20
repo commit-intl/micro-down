@@ -2,35 +2,35 @@ const microdown = function () {
   /*
    * tag helper
    */
-  var t = (tag, text, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => `${k}="${e(values[k]) || ''}"`).join(' ') : '')}>${text}</${tag}>`,
+  var tag = (tag, text, values) => `<${tag + (values ? ' ' + Object.keys(values).map(k => values[k] ? `${k}="${encode(values[k]) || ''}"` : '').join(' ') : '')}>${text}</${tag}>`,
     /**
      * outdent all rows by first as reference
      */
-    o = (text) => {
+    outdent = (text) => {
       return text.replace(new RegExp('^' + (text.match(/^[^\s]?\s+/) || '')[0], 'gm'), '');
     },
     /**
      * encode double quotes and HTML tags to entities
      */
-    e = (text) => {
-      return text !== undefined ? text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+    encode = (text) => {
+      return text ? text.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
     },
     /**
      * recursive list parser
      */
-    l = (text, temp) => {
+    list = (text, temp) => {
       temp = text.match(/^[+-]/m) ? 'ul' : 'ol';
       return text ?
-        `<${temp}>${text.replace(/(?:[+-]|\d+\.) +(.*)\n?(([ \t].*\n?)*)/g, (match, a, b) => `<li>${inlineBlock(`${a}\n${o(b || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g, l)}`)}</li>`)}</${temp}>`
+        `<${temp}>${text.replace(/(?:[+-]|\d+\.) +(.*)\n?(([ \t].*\n?)*)/g, (match, a, b) => `<li>${inlineBlock(`${a}\n${outdent(b || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g, list)}`)}</li>`)}</${temp}>`
         : '';
     },
 
     /**
      * function chain of replacements
      */
-    m = (tag, regex, replacement, parser) => (match, a) => {
+    chain = (t, regex, replacement, parser) => (match, a) => {
       match = match.replace(regex, replacement);
-      return t(tag, parser ? parser(match) : match);
+      return tag(t, parser ? parser(match) : match);
     },
     block = (text) => p(text, [
       // BLOCK STUFF ===============================
@@ -41,80 +41,79 @@ const microdown = function () {
 
       // pre format block
       /^("""|```)(.*)(\n(.*\n)*?)\1/gm,
-      (match, wrapper, c, text, tag) =>
+      (match, wrapper, c, text) =>
         wrapper === '"""' ?
-          t('div', parse(text), { class: c })
-          : t('pre', e(text), { class: c }),
+          tag('div', parse(text), {class: c})
+          : tag('pre', encode(text), {class: c}),
 
       // blockquotes
       /(^>.*\n?)+/gm,
-      m('blockquote', /^> ?(.*)$/gm, '$1', inline),
+      chain('blockquote', /^> ?(.*)$/gm, '$1', inline),
 
       // tables
       /((^|\n)\|.+)+/g,
-      m('table', /^.*(\n\|---.*?)?$/gm,
+      chain('table', /^.*(\n\|---.*?)?$/gm,
         (match, subline) =>
-          m('tr', /\|(-?)([^|]+)\1(\|$)?/gm,
-            (match, type, text) => t(type || subline ? 'th' : 'td', inlineBlock(text))
-          )(match.slice(0, match.length - (subline || '').length))
+          chain('tr', /\|(-?)([^|]+)\1(\|$)?/gm,
+            (match, type, text) => tag(type || subline ? 'th' : 'td', inlineBlock(text)),
+          )(match.slice(0, match.length - (subline || '').length)),
       ),
 
       // lists
       /(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
-      l,
+      list,
       //anchor
       /#\[([^\]]+?)]/g,
       '<a name="$1"></a>',
 
       // headlines
       /^(#+) +(.*)(?:$)/gm,
-      (match, h, text) => t('h' + h.length, inlineBlock(text)),
+      (match, h, text) => tag('h' + h.length, inlineBlock(text)),
 
       // horizontal rule
       /^(===+|---+)(?=\s*$)/gm,
       '<hr>',
     ], parse),
-    inlineBlock = (text) => {
+    inlineBlock = (text, dontInline) => {
       var temp = [],
         injectInlineBlock = (text) => text.replace(
           /\\(\d+)/g,
           (match, code) => injectInlineBlock(temp[Number.parseInt(code) - 1]),
         );
 
-      text = text.trim()
+      text = (text || '').trim()
       // inline code block
         .replace(
           /`([^`]*)`/g,
-          (match, text) => '\\' + temp.push(t('code', e(text))),
+          (match, text) => '\\' + temp.push(tag('code', encode(text))),
         )
         // inline media (a / img / iframe)
         .replace(
-          /[!&]?\[([!&]?\[.*?\)|[^\]]*?)]\((.*?)( .*?)?\)/g,
-          (match, text, href, title) => {
+          /[!&]?\[([!&]?\[.*?\)|[^\]]*?)]\((.*?)( .*?)?\)|(\w+:\/\/[$\-.+!*'()/,\w]+)/g,
+          (match, text, href, title, link) => {
+            if (link) {
+              return  dontInline ? match : '\\' + temp.push(tag('a', link, {href: link}));
+            }
             if (match[0] == '&') {
               text = text.match(/^(.+),(.+),([^ \]]+)( ?.+?)?$/);
-              match = t('iframe', '', {
-                width: text[1],
-                height: text[2],
-                frameborder: text[3],
-                class: text[4],
-                src: href,
-                title,
-              })
+              return '\\' + temp.push(
+                tag('iframe', '', {
+                  width: text[1],
+                  height: text[2],
+                  frameborder: text[3],
+                  class: text[4],
+                  src: href,
+                  title,
+                }));
             }
-            else {
-              match = match[0] == '!'
-                ? t('img', '', { src: href, alt: text, title })
-                : t('a', inlineBlock(text), { href, title });
-            }
-            return '\\' + temp.push(match);
+            return '\\' + temp.push(
+              match[0] == '!'
+                ? tag('img', '', {src: href, alt: text, title})
+                : tag('a', inlineBlock(text, 1), {href, title}),
+            );
           },
         );
-
-      console.log('inlineBlock', temp, text);
-
-      text = injectInlineBlock(inline(text));
-      console.log('inlineBlock', text);
+      text = injectInlineBlock(dontInline ? text : inline(text));
       return text;
     },
     inline = (text) => p(text, [
@@ -123,14 +122,14 @@ const microdown = function () {
       (match, k, text) => {
         k = k.length;
         text = inline(text);
-        if (k > 1) text = t('strong', text);
-        if (k % 2) text = t('em', text);
+        if (k > 1) text = tag('strong', text);
+        if (k % 2) text = tag('em', text);
         return text;
       },
 
       // strike through
       /(~{1,3})((.|\n)+?)\1/g,
-      (match, k, text) => t([, 'u', 's', 'del'][k.length], inline(text)),
+      (match, k, text) => tag([, 'u', 's', 'del'][k.length], inline(text)),
 
       // replace remaining newlines with a <br>
       /  \n|\n  /g,
@@ -159,14 +158,14 @@ const microdown = function () {
       if (temp === text && !temp.match(/^[\s\n]*$/i)) {
         temp = inlineBlock(temp)
         // handle paragraphs
-          .replace(/((.|\n)+?)(\n\n+|$)/g, (match, text) => t('p', text));
+          .replace(/((.|\n)+?)(\n\n+|$)/g, (match, text) => tag('p', text));
       }
 
       return temp.replace(/&#(\d+);/g, (match, code) => String.fromCharCode(parseInt(code)));
     }
   ;
 
-  return { parse, block, inline, inlineBlock };
+  return {parse, block, inline, inlineBlock};
 }();
 
 if (typeof module !== 'undefined') {
