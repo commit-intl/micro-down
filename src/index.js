@@ -71,7 +71,7 @@ const microdown = function () {
       (match, h, text) => tag('h' + h.length, inlineBlock(text)),
 
       // horizontal rule
-      /^(===+|---+|(?:\* )+\*)(?=\s*$)/gm,
+      /^(===+|---+|(?:\* ){2,}\*)(?=\s*$)/gm,
       '<hr>',
     ], parse),
     inlineBlock = (text, dontInline) => {
