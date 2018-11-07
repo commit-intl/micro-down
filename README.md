@@ -8,7 +8,7 @@ JavaScript based Markdown parser without dependencies.
 
 **1.3kB** markdown parser *(gzipped + minified)*
 
-[check out this demo](https://coding-intl.github.io/micro-down)
+[check out this demo](https://commit-intl.github.io/micro-down)
 
 ```
 npm install -S micro-down
