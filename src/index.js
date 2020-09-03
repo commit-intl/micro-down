@@ -32,7 +32,7 @@ const microdown = function () {
       match = match.replace(regex, replacement);
       return tag(t, parser ? parser(match) : match);
     },
-    block = (text, options = {}) => p(text, [
+    block = (text, options) => p(text, [
       // BLOCK STUFF ===============================
 
       // comments
@@ -40,11 +40,11 @@ const microdown = function () {
       '<!--$1-->',
 
       // pre format block
-      /^("""|```)(.*)(\n(.*\n)*?)\1/gm,
+      /^("""|```)(.*)\n((.*\n)*?)\1/gm,
       (match, wrapper, c, text) =>
         wrapper === '"""' ?
-          tag('div', parse(text), {class: c})
-          : options.preCode 
+          tag('div', parse(text, options), {class: c})
+          : options && options.preCode 
           ? tag('pre', tag('code', encode(text), {class: c}))
           : tag('pre', encode(text), {class: c}),
 
@@ -75,7 +75,7 @@ const microdown = function () {
       // horizontal rule
       /^(===+|---+)(?=\s*$)/gm,
       '<hr>',
-    ], parse),
+    ], parse, options),
     inlineBlock = (text, dontInline) => {
       var temp = [],
         injectInlineBlock = (text) => text.replace(
@@ -137,13 +137,13 @@ const microdown = function () {
       /  \n|\n  /g,
       '<br>',
     ], inline),
-    p = (text, rules, parse) => {
+    p = (text, rules, parse, options) => {
       var i = 0, f;
       while (i < rules.length) {
         if (f = rules[i++].exec(text)) {
-          return parse(text.slice(0, f.index))
+          return parse(text.slice(0, f.index), options)
             + (typeof rules[i] === 'string' ? rules[i].replace(/\$(\d)/g, (m, d) => f[d]) : rules[i].apply(this, f))
-            + parse(text.slice(f.index + f[0].length));
+            + parse(text.slice(f.index + f[0].length), options);
         }
         i++;
       }

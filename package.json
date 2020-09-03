@@ -4,8 +4,8 @@
   "description": "tiny 1.3kB markdown parser",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest ./src --coverage",
-    "build": "babel --out-dir dist src && terser --compress --mangle --output ./dist/index.js -- ./dist/index.js",
+    "test": "jest --config .jestrc.json ./src --coverage",
+    "build": "babel --out-dir dist src && uglifyjs --compress --mangle --output ./dist/index.js -- ./dist/index.js",
     "prepublishOnly": "npm run build"
   },
   "repository": {
@@ -33,7 +33,7 @@
     "@babel/core": "7.11.5",
     "@babel/cli": "7.11.5",
     "@babel/preset-env": "7.11.5",
-    "terser": "5.3.0",
+    "uglify-js": "3.10.3",
     "jest": "^26.4.2"
   }
 }

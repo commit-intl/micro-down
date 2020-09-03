@@ -15,15 +15,14 @@ npm install -S micro-down
 ```
 
 ## usage
-micro-down exports 4 functions, although you mostly want to use parse.
+micro-down exports 4 functions, although you mostly want to use **parse**.
 
 **parse** turns the full markdown into html
-`const result = markdown.parse('_this_ is **MARKDOWN**');`
-
+```
+const result = markdown.parse('_this_ is **MARKDOWN**');
+```
 **inline** replaces only the inline markup. (bold,italic,underline,strike-trough,line-breaks);
-
 **inlineBlock** transforms only inline code blocks ands media
-
 **block** handles everything else, see below.
 
 As a second parameter you can pass an options object:
