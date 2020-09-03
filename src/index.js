@@ -32,7 +32,7 @@ const microdown = function () {
       match = match.replace(regex, replacement);
       return tag(t, parser ? parser(match) : match);
     },
-    block = (text) => p(text, [
+    block = (text, options = {}) => p(text, [
       // BLOCK STUFF ===============================
 
       // comments
@@ -44,6 +44,8 @@ const microdown = function () {
       (match, wrapper, c, text) =>
         wrapper === '"""' ?
           tag('div', parse(text), {class: c})
+          : options.preCode 
+          ? tag('pre', tag('code', encode(text), {class: c}))
           : tag('pre', encode(text), {class: c}),
 
       // blockquotes
@@ -147,13 +149,13 @@ const microdown = function () {
       }
       return text;
     },
-    parse = (text) => {
+    parse = (text, options) => {
       // clean input
       text = text
         .replace(/[\r\v\b\f]/g, '')
         .replace(/\\./g, (match) => `&#${match.charCodeAt(1)};`);
 
-      var temp = block(text);
+      var temp = block(text, options);
 
       if (temp === text && !temp.match(/^[\s\n]*$/i)) {
         temp = inlineBlock(temp)
