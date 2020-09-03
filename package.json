@@ -1,7 +1,7 @@
 {
   "name": "micro-down",
-  "version": "1.5.2",
-  "description": "tiny 1.3kB markdown parser",
+  "version": "1.6.0",
+  "description": "tiny 1.4kB markdown parser",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest --config .jestrc.json ./src --coverage",
