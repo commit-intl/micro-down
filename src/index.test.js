@@ -121,6 +121,16 @@ describe('md.parse()', () => {
       );
     });
   });
+
+  describe('tables', () => {
+    it('parses basic', () => {
+      expect(md.block('|a|b|\n|---|---|\n|1|2|')).toEqual('<table><tr><th>a</th><th>b</th></tr>\n<tr><td>1</td><td>2</td></tr></table>');
+    });
+    it('parses empty cells', () => {
+      expect(md.block('|a|b|\n|---|---|\n|||')).toEqual('<table><tr><th>a</th><th>b</th></tr>\n<tr><td></td><td></td></tr></table>');
+    });
+  });
+
   //
   // describe('lists', () => {
   //   it('parses an unordered list with *', () => {
