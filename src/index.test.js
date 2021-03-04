@@ -121,6 +121,13 @@ describe('md.parse()', () => {
       );
     });
   });
+
+  describe('lists', () => {
+    it('should not double parse nested list contents', () => {
+      expect(md.parse('- a\n  - [b](http://b)')).toEqual('<ul><li>a\n<ul><li><a href="http://b" >b</a>\n</li></ul></li></ul>');
+    });
+  });
+
   //
   // describe('lists', () => {
   //   it('parses an unordered list with *', () => {
