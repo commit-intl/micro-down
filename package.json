@@ -30,10 +30,10 @@
   },
   "homepage": "https://github.com/coding-intl/micro-down#readme",
   "devDependencies": {
-    "@babel/core": "7.11.5",
     "@babel/cli": "7.11.5",
+    "@babel/core": "7.11.5",
     "@babel/preset-env": "7.11.5",
-    "uglify-js": "3.10.3",
-    "jest": "^26.4.2"
+    "jest": "^26.4.2",
+    "uglify-js": "3.10.3"
   }
 }

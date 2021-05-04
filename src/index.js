@@ -7,7 +7,7 @@ const microdown = function () {
      * outdent all rows by first as reference
      */
     outdent = (text) => {
-      return text.replace(new RegExp('^' + (text.match(/^[^\s]?\s+/) || '')[0], 'gm'), '');
+      return text.replace(new RegExp('^' + (text.match(/^\s+/) || '')[0], 'gm'), '');
     },
     /**
      * encode double quotes and HTML tags to entities
@@ -18,10 +18,11 @@ const microdown = function () {
     /**
      * recursive list parser
      */
+    listR = /(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
     list = (text, temp) => {
       temp = text.match(/^[+-]/m) ? 'ul' : 'ol';
       return text ?
-        `<${temp}>${text.replace(/(?:[+-]|\d+\.) +(.*)\n?(([ \t].*\n?)*)/g, (match, a, b) => `<li>${inlineBlock(`${a}\n${outdent(b || '').replace(/(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g, list)}`)}</li>`)}</${temp}>`
+        `<${temp}>${text.replace(/(?:[+-]|\d+\.) +(.*)\n?(([ \t].*\n?)*)/g, (match, a, b) => `<li>${inlineBlock(`${a}\n${outdent(b || '').replace(listR, list)}`)}</li>`)}</${temp}>`
         : '';
     },
 
@@ -62,7 +63,7 @@ const microdown = function () {
       ),
 
       // lists
-      /(?:(^|\n)([+-]|\d+\.) +(.*(\n[ \t]+.*)*))+/g,
+      listR,
       list,
       //anchor
       /#\[([^\]]+?)]/g,
