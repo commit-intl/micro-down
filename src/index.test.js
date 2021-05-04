@@ -192,8 +192,17 @@ describe("md.parse()", () => {
     it('parses basic', () => {
       expect(md.block('|a|b|\n|---|---|\n|1|2|')).toEqual('<table><tr><th>a</th><th>b</th></tr>\n<tr><td>1</td><td>2</td></tr></table>');
     });
+    it('parses basic without header', () => {
+      expect(md.block('|a|b|\n|1|2|')).toEqual('<table><tr><td>a</td><td>b</td></tr>\n<tr><td>1</td><td>2</td></tr></table>');
+    });
     it('parses empty cells', () => {
       expect(md.block('|a|b|\n|---|---|\n|||')).toEqual('<table><tr><th>a</th><th>b</th></tr>\n<tr><td></td><td></td></tr></table>');
+    });
+    it('parses empty header cells', () => {
+      expect(md.block('|a||c|\n|---|---|\n|a|b|c|')).toEqual('<table><tr><th>a</th><th></th><th>c</th></tr>\n<tr><td>a</td><td>b</td><td>c</td></tr></table>');
+    });
+    it('parses empty without header', () => {
+      expect(md.block('|||c|\n|1|2|')).toEqual('<table><tr><td></td><td></td><td>c</td></tr>\n<tr><td>1</td><td>2</td></tr></table>');
     });
   });
 });
