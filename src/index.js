@@ -57,7 +57,7 @@ const microdown = function () {
       /((^|\n)\|.+)+/g,
       chain('table', /^.*(\n\|---.*?)?$/gm,
         (match, subline) =>
-          chain('tr', /\|(-?)([^|]+)\1(\|$)?/gm,
+          chain('tr', /\|(-?)([^|]*)\1(\|$)?/gm,
             (match, type, text) => tag(type || subline ? 'th' : 'td', inlineBlock(text)),
           )(match.slice(0, match.length - (subline || '').length)),
       ),
