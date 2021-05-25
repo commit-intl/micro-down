@@ -1,6 +1,6 @@
 {
   "name": "micro-down",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "tiny 1.4kB markdown parser",
   "main": "dist/index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/coding-intl/micro-down.git"
+    "url": "git+https://github.com/commit-intl/micro-down.git"
   },
   "keywords": [
     "markdown",
@@ -22,13 +22,13 @@
     "javascript",
     "js"
   ],
-  "author": "Dustin Hagemeier",
-  "license": "GPL-3.0",
+  "author": "Dustin Hagemeier <dustin@commit.international> (https://commit.international)",
+  "license": "MIT",
   "browserslist": "> 0.25%, not dead",
   "bugs": {
-    "url": "https://github.com/coding-intl/micro-down/issues"
+    "url": "https://github.com/commit-intl/micro-down/issues"
   },
-  "homepage": "https://github.com/coding-intl/micro-down#readme",
+  "homepage": "https://github.com/commit-intl/micro-down#readme",
   "devDependencies": {
     "@babel/cli": "7.11.5",
     "@babel/core": "7.11.5",
