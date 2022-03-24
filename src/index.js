@@ -41,9 +41,9 @@ const microdown = function () {
       '<!--$1-->',
 
       // pre format block
-      /^("""|```)(.*)\n((.*\n)*?)\1/gm,
+      /^("""+|:::+|```+)(.*)\n((.*\n)*?)\1/gm,
       (match, wrapper, c, text) =>
-        wrapper === '"""' ?
+        !/`/.test(wrapper) ?
           tag('div', parse(text, options), {class: c})
           : options && options.preCode 
           ? tag('pre', tag('code', encode(text), {class: c}))
